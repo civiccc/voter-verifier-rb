@@ -1,0 +1,85 @@
+# Defines services that can be started in development/test environments within
+# the container environment created by Dock.
+#
+# See the dock/start-everything script for an example of how this is invoked.
+
+version: '2.1'
+
+services:
+  # *_base services can be defined within the compose file as seen here or
+  # referenced from another file on disk. Use these entries to define configurations
+  # core to the particular service type and/or viewed as standards across our
+  # infrastructure (e.g. image)
+  # ref ***REMOVED******REMOVED*** for
+  # more details and predefined *_base services defined by infrastructure
+  example-service_base:
+    build:
+      context: .
+      dockerfile: dock/bootstrap_Dockerfile
+    environment:
+      APP_UID:
+      APP_GID:
+      ARCANUS_PASSWORD: ${ARCANUS_PASSWORD_EXAMPLE_SERVICE}
+      DATABASE_URL: mysql2://root:password@docker-host:3306
+      SERVICE_HOST: docker-host
+      # The async tier is more permissive
+      TIER: async
+    # Add healthchecks with appropriate parameters to see if the service is actually listening on
+    # the port. These healthchecks are happening from within the internal container so (11xxx)
+    # i.e mapped ports should not be checked rather the actual service port needs to be checked
+    # Note: This interval and retries are set for smaller services that come up relatively faster.
+    # For bigger services these may need to be tweaked.
+    # If its an http service you may use test as curl. e.g. curl localhost:3000
+    # reference: https://docs.docker.com/compose/compose-file/compose-file-v2/#healthcheck
+    healthcheck:
+      test: 'netstat -nlp | grep 11999'
+      interval: 1s
+      timeout: 10s
+      retries: 120
+    # Provide port mapping specification, as defined and leveraged by proximo
+    # within staging and production environments, in order to avoid port conflicts
+    # across services. Contact Ops for port assignment and
+    # ref: ***REMOVED******REMOVED***)
+    # for examples.
+    # e.g.:
+    ports:
+      - '11999:11999'
+      - '21999:11999'
+    volumes:
+      - '.:/src'
+    working_dir: '/src'
+    command: ['bash', '-c', 'dock/initialize && dock/datastore_setup && dock/run']
+
+  example-service:
+    extends: example-service_base
+    depends_on:
+      # We just need to check if the service is healthy. The actual port test is done in
+      # base-compose.yml for all the datastores.
+      mysql:
+        condition: service_healthy
+    environment:
+      BRIGADE_ENV: development
+
+  example-service_test:
+    extends: example-service_base
+    depends_on:
+      mysql_test:
+        condition: service_healthy
+    environment:
+      BRIGADE_ENV: test
+
+  mysql:
+    extends:
+      file: $BASE_COMPOSE
+      service: mysql_dev_base
+
+  # Mounted on a tmpfs for tests so we don't suffer from disk contention
+  mysql_test:
+    extends:
+      file: $BASE_COMPOSE
+      service: mysql_test_base
+
+# Define names of volumes that you want to be preserved between container restarts.
+# These are referenced above in the `volumes` section of the service.
+volumes:
+  mysql:

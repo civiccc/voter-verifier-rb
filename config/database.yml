@@ -1,0 +1,22 @@
+default: &default
+  url: <%= ENV['DATABASE_URL'] %>
+  migration_url: <%= ENV['DATABASE_MIGRATION_URL'] %>
+  database: examples
+  adapter: mysql2
+  encoding: utf8mb4
+  reconnect: true
+  pool: <%= configatron.server.thread_count %>
+
+development:
+  <<: *default
+  database: examples_dev
+
+production:
+  <<: *default
+
+staging:
+  <<: *default
+
+test:
+  <<: *default
+  database: examples_test

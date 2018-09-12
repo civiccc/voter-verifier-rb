@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -euo pipefail
+
+source ./script/helpers.bash
+
+MYSQL_HOST=docker-host wait-for-mysql
+ensure-schema-up-to-date

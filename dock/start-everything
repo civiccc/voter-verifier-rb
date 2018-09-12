@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Executed when you run `dock` in the root of this repo without any arguments.
+# It starts up some core services and displays instructions for getting started.
+
+source $(dirname $0)/../script/helpers.bash
+
+section "Downloading latest version of all images..."
+docker-compose pull
+
+section "Starting up MySQL/service and running migrations..."
+
+# Ensure we gracefully stop containers when exiting the Dock container
+exit_handler='trap "docker-compose stop; exit" EXIT INT QUIT TERM'
+eval "$exit_handler"
+
+docker-compose up --build -d example-service
+
+cat <<MSG
+================================ INSTRUCTIONS =================================
+
+You can view logs in this console by executing:
+
+  docker-compose logs [mysql | example-service | etc]
+
+You can restart services in this console by executing:
+
+  docker-compose restart [mysql | example-service | etc]
+
+===============================================================================
+MSG
+
+export PS1='[\h \W]\$ ' # Slightly better prompt
+
+# Re-exec as a new bash shell with the TRAP handler defined before entering the
+# prompt. This hack is necessary so that if you run `docker stop <id>` in order
+# to shut down this container that we still gracefully shutdown services.
+exec bash --rcfile <(echo $exit_handler) -i

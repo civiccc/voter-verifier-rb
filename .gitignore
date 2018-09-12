@@ -1,0 +1,12 @@
+*.sw?
+.DS_Store
+.arcanus/unprotected.key
+.bundle
+.env.local
+.ruby-gemset
+spec/client_tests/node_modules
+config/configatron/local.rb
+.idea/
+tmp/
+log/
+vendor/
