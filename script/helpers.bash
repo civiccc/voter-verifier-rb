@@ -8,19 +8,14 @@ set -euo pipefail
 source /***REMOVED***
 source /***REMOVED***
 
-wait-for-mysql() {
-  echo "Waiting for MySQL..."
-  dockerize -timeout 30s -wait tcp://${MYSQL_HOST:-127.0.0.1}:3306 \
-    echo "MySQL ready!" && return
+wait-for-elasticsearch() {
+  echo "Waiting for Elasticsearch..."
+  dockerize -timeout 30s -wait http://${ELASTICSEARCH_HOST:-127.0.0.1}:${ELASTICSEARCH_PORT:-9200} \
+    echo "Elasticsearch ready!" && return
 
-  error "Could not connect to MySQL!"
-  docker-compose logs --tail=20 mysql
+  error "Could not connect to Elasticsearch!"
+  docker-compose logs --tail=20 elasticsearch
   return 1
-}
-
-ensure-schema-up-to-date() {
-  bundle exec rake db:create 2>/dev/null || true
-  bundle exec rake db:migrate
 }
 
 install-gems() {

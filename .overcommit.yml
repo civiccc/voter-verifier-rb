@@ -31,19 +31,6 @@ PreCommit:
   PryBinding:
     enabled: true
 
-  RailsSchemaUpToDate:
-    enabled: true
-
-  RedundantIndex:
-    enabled: true
-    description: 'Checking for redundant/duplicate indexes'
-    required_executable: 'pt-duplicate-key-checker'
-    flags: ['--user=root', '--password=password', '--host=127.0.0.1', '--databases=examples_dev']
-    install_command: 'yum/brew install percona-toolkit'
-    include:
-      - 'db/migrate/*.rb'
-      - 'db/schema.rb'
-
   RuboCop:
     enabled: true
 

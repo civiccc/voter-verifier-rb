@@ -14,18 +14,18 @@ section "Starting up MySQL/service and running migrations..."
 exit_handler='trap "docker-compose stop; exit" EXIT INT QUIT TERM'
 eval "$exit_handler"
 
-docker-compose up --build -d example-service
+docker-compose up --build -d verification-service
 
 cat <<MSG
 ================================ INSTRUCTIONS =================================
 
 You can view logs in this console by executing:
 
-  docker-compose logs [mysql | example-service | etc]
+  docker-compose logs [mysql | verification-service | etc]
 
 You can restart services in this console by executing:
 
-  docker-compose restart [mysql | example-service | etc]
+  docker-compose restart [mysql | verification-service | etc]
 
 ===============================================================================
 MSG

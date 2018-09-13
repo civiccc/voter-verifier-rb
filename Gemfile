@@ -7,12 +7,9 @@ gem 'dogstatsd-ruby', require: 'datadog/statsd'
 gem 'sentry-raven', require: false
 gem 'skylight', '~> 1.4.4'
 
-gem 'activemodel'
-gem 'activerecord'
 gem 'activesupport', require: 'active_support/all'
-gem 'mysql2'
-gem 'mysql_online_migrations'
-gem 'paranoia'
+gem 'elasticsearch'
+gem 'elasticsearch-dsl'
 
 ***REMOVED***
 gem 'thrift'
@@ -27,8 +24,7 @@ end
 
 group :test do
   gem 'factory_bot'
+  gem 'faker'
   gem 'rspec'
-  gem 'shoulda-matchers',
-      git: 'https://github.com/thoughtbot/shoulda-matchers.git'
   gem 'timecop'
 end

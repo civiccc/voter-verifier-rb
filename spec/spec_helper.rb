@@ -18,12 +18,7 @@ Dir[File.expand_path('support/shared_examples/*', __dir__)].each do |f|
   require f
 end
 
-# Checks for pending migrations before tests are run
-ActiveRecord::Migration.maintain_test_schema!
-
 RSpec.configure do |config|
-  config.use_transactional_tests = true
-
   config.disable_monkey_patching!
 
   config.order = :random
@@ -35,15 +30,11 @@ RSpec.configure do |config|
     config.default_formatter = 'doc'
   end
 
-  # This can be used by accessing `fixture_path` in specs.
-  # eg File.read(File.join(fixture_path, 'my_file.csv'))
-  config.fixture_path = File.expand_path('support/file_fixtures', __dir__)
-
   # Extremely noisy on thrift code; enable at your own risk
   # config.warnings = true
 
   ###
-  # RSpec 4 comatibility stuff
+  # RSpec 4 compatibility stuff
   ###
 
   config.expect_with :rspec do |expectations|

@@ -12,15 +12,15 @@ services:
   # infrastructure (e.g. image)
   # ref ***REMOVED******REMOVED*** for
   # more details and predefined *_base services defined by infrastructure
-  example-service_base:
+  verification-service_base:
     build:
       context: .
       dockerfile: dock/bootstrap_Dockerfile
     environment:
       APP_UID:
       APP_GID:
-      ARCANUS_PASSWORD: ${ARCANUS_PASSWORD_EXAMPLE_SERVICE}
-      DATABASE_URL: mysql2://root:password@docker-host:3306
+      ARCANUS_PASSWORD: ${ARCANUS_PASSWORD_VERIFICATION_SERVICE}
+      ELASTICSEARCH_HOSTS: http://docker-host:9200/
       SERVICE_HOST: docker-host
       # The async tier is more permissive
       TIER: async
@@ -32,7 +32,7 @@ services:
     # If its an http service you may use test as curl. e.g. curl localhost:3000
     # reference: https://docs.docker.com/compose/compose-file/compose-file-v2/#healthcheck
     healthcheck:
-      test: 'netstat -nlp | grep 11999'
+      test: 'netstat -nlp | grep ***REMOVED***'
       interval: 1s
       timeout: 10s
       retries: 120
@@ -43,43 +43,44 @@ services:
     # for examples.
     # e.g.:
     ports:
-      - '11999:11999'
-      - '21999:11999'
+      - '***REMOVED***:***REMOVED***'
+      - '***REMOVED***:***REMOVED***'
     volumes:
       - '.:/src'
     working_dir: '/src'
     command: ['bash', '-c', 'dock/initialize && dock/datastore_setup && dock/run']
 
-  example-service:
-    extends: example-service_base
+  verification-service:
+    extends: verification-service_base
     depends_on:
       # We just need to check if the service is healthy. The actual port test is done in
       # base-compose.yml for all the datastores.
-      mysql:
+      elasticsearch:
         condition: service_healthy
     environment:
       BRIGADE_ENV: development
 
-  example-service_test:
-    extends: example-service_base
+  verification-service_test:
+    extends: verification-service_base
     depends_on:
-      mysql_test:
+      elasticsearch_test:
         condition: service_healthy
     environment:
       BRIGADE_ENV: test
 
-  mysql:
+  elasticsearch:
     extends:
       file: $BASE_COMPOSE
-      service: mysql_dev_base
+      service: elasticsearch_dev_base
+    command: ['elasticsearch', '--action.write_consistency=one']
 
-  # Mounted on a tmpfs for tests so we don't suffer from disk contention
-  mysql_test:
+  elasticsearch_test:
     extends:
       file: $BASE_COMPOSE
-      service: mysql_test_base
+      service: elasticsearch_test_base
+    command: ['elasticsearch', '--action.write_consistency=one']
 
 # Define names of volumes that you want to be preserved between container restarts.
 # These are referenced above in the `volumes` section of the service.
 volumes:
-  mysql:
+  elasticsearch:

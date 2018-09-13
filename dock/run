@@ -6,4 +6,4 @@ if [ -n "${ARCANUS_PASSWORD}" ]; then
   eval "$(arcanus export --shell)"
 fi
 
-cd /src && bundle exec rake example_service:run
+cd /src && bundle exec rake verification_service:run

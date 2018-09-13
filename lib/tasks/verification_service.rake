@@ -1,6 +1,6 @@
-require_relative '../../app/example_server'
+require_relative '../../app/verification_server'
 
-namespace :example_service do
+namespace :verification_service do
   EXIT_SIGNALS = %w[QUIT INT TERM].freeze # should SIGINT clean-kill?
 
   def run_gracefully(daemon)
@@ -8,8 +8,8 @@ namespace :example_service do
     daemon.start!
   end
 
-  desc 'Start the example service in listening mode.'
+  desc 'Start the verification service in listening mode.'
   task run: :environment do
-    run_gracefully ExampleServer.new
+    run_gracefully VerificationServer.new
   end
 end

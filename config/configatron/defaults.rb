@@ -1,11 +1,10 @@
 configatron.service do |service|
-  service.name = 'example_service'.freeze
+  service.name = 'verification_service'.freeze
   service.host = ENV['SERVICE_HOST'].presence.freeze
 end
 
 configatron.server do |server|
-  server.port = ENV['PORT']&.to_i || 11999
-  server.thread_count = 25
+  server.port = ENV['PORT']&.to_i || ***REMOVED***
 end
 
 configatron.statsd do |statsd|

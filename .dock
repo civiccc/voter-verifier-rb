@@ -6,7 +6,7 @@
 # have different repos and container names) to point to the same volumes so gems
 # can be reused (e.g. foghorn-rspec, foghorn-rspec@2, and foghorn-overcommit all
 # have the same project name "foghorn").
-project=example-service
+project=verification-service
 
 dockerfile dock/development_Dockerfile
 build_context dock # Directory to use as build context (relative to repo root)
@@ -65,13 +65,13 @@ fi
 if ! ci; then
   # Define services to launch when the project is composed in an extended Dock, multi-project environment.
   # Services should be defined within a docker-compose.yml file associated with the project
-  startup_services "example-service"
+  startup_services "verification-service"
 
   if osx; then
     # add to isolated network and publish ports of interest to host to workaround
     # https://forums.docker.com/t/should-docker-run-net-host-work/14215
-    publish "11999:11999" # thrift-rpc
-    publish "21999:21999" # async
+    publish "***REMOVED***:***REMOVED***" # thrift-rpc
+    publish "***REMOVED***:***REMOVED***" # async
   else
     # share host network interface
     run_flags --network host
@@ -88,7 +88,7 @@ else
   run_flags --network bridge
 
   # Utilize test variants of services when in CI mode
-  startup_services "example-service_test"
+  startup_services "verification-service_test"
 
   # Do not provide a 'named' volume to prevent persisting files (e.g. gems) between runs
   volume "/home/app/.cache"
