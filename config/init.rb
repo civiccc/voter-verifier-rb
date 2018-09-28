@@ -20,6 +20,7 @@ require_dir 'app/models/concerns'.freeze
 require_dir 'app/models'.freeze
 require_dir 'app/handlers/helpers'.freeze
 require_dir 'app/handlers'.freeze
+require_dir 'app/queries'.freeze
 
 # Initialize; we're ready to go
 require_dir 'config/initializers'.freeze

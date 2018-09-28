@@ -8,5 +8,5 @@ spec/client_tests/node_modules
 config/configatron/local.rb
 .idea/
 tmp/
-log/
+log/*
 vendor/
