@@ -1,11 +1,6 @@
 require 'elasticsearch/dsl'
 include Elasticsearch::DSL # rubocop:disable Style/MixinUsage
 
-# TODO remove placeholder
-def geocode(_zip_code)
-  ['35.193640', '-106.685666']
-end
-
 # Query builder for searching the votizen_voter index in ElasticSearch
 module Queries
   module VoterRecord
@@ -28,20 +23,25 @@ module Queries
                      alt_first_name: nil, alt_middle_name: nil, alt_last_name: nil,
                      street_address: nil, city: nil, state: nil, zip_code: nil,
                      dob: nil, email: nil, phone: nil)
+        preprocessed_address = Preprocessors::Address.preprocess(
+          street_address, city, state, zip_code
+        )
+        preprocessed_name = Preprocessors::Name.preprocess(first_name, middle_name, last_name)
+        preprocessed_alt_name = Preprocessors::Name.preprocess(
+          alt_first_name, alt_middle_name, alt_last_name
+        )
+
         @max_results = max_results
 
-        @first_name = first_name
-        @alt_first_name = alt_first_name
-        @middle_name = middle_name
-        @alt_middle_name = alt_middle_name
-        @last_name = last_name
-        @alt_last_name = alt_last_name
+        @first_name, @middle_name, @last_name = preprocessed_name.values_at(
+        :first, :middle, :last
+        )
+        @alt_first_name, @alt_middle_name, @alt_last_name = preprocessed_alt_name.values_at(
+        :first, :middle, :last
+        )
 
-        @street_address = street_address
-        @city = city
-        @state = state
-        @zip_code = zip_code
-        @lat, @lng = zip_code.nil? ? nil : geocode(zip_code)
+        @street_address, @city, @state, @zip_code, @lat, @lng = preprocessed_address.
+          values_at(street_address, :city, :state, :zip_code, :lat, :lng)
 
         @dob = dob
         @email = email
