@@ -8,7 +8,7 @@ source $(dirname $0)/../script/helpers.bash
 section "Downloading latest version of all images..."
 docker-compose pull
 
-section "Starting up MySQL/service and running migrations..."
+section "Starting up Elasticsearch/service and building indexes..."
 
 # Ensure we gracefully stop containers when exiting the Dock container
 exit_handler='trap "docker-compose stop; exit" EXIT INT QUIT TERM'
@@ -21,11 +21,11 @@ cat <<MSG
 
 You can view logs in this console by executing:
 
-  docker-compose logs [mysql | verification-service | etc]
+  docker-compose logs [elasticsearch | verification-service | etc]
 
 You can restart services in this console by executing:
 
-  docker-compose restart [mysql | verification-service | etc]
+  docker-compose restart [elasticsearch | verification-service | etc]
 
 ===============================================================================
 MSG

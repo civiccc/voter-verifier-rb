@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-if [ -n "${ARCANUS_PASSWORD}" ]; then
-  eval "$(arcanus export --shell)"
+if [ -n "${CRYOGEN_KEY}" ]; then
+  . /dev/stdin <<< "$(cryogen export)"
 fi
 
 cd /src && bundle exec rake verification_service:run

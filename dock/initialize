@@ -5,10 +5,3 @@ set -euo pipefail
 source ./script/helpers.bash
 
 install-gems
-
-# if arcanus password provided as environment variable within operating environment,
-# unlock application secrets
-if [ -n "${ARCANUS_PASSWORD}" ]; then
-  section "Unlocking secrets..."
-  arcanus unlock
-fi

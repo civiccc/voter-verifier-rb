@@ -32,7 +32,7 @@ optional_env_var DEPLOY_TAG
 
 # These variables are used in some Jenkins jobs, but we need to explicitly allow
 # them to be passed through from the Jenkins worker to the container.
-optional_env_var ARCANUS_PASSWORD
+optional_env_var CRYOGEN_KEY
 
 # Allow our local SSH agent to be used within the container
 # and ensure proper configuration for Jenkins deployments and

@@ -19,7 +19,7 @@ services:
     environment:
       APP_UID:
       APP_GID:
-      ARCANUS_PASSWORD: ${ARCANUS_PASSWORD_VERIFICATION_SERVICE}
+      CRYOGEN_KEY: ${CRYOGEN_KEY_VERIFICATION_SERVICE}
       ELASTICSEARCH_HOSTS: http://docker-host:9200/
       SERVICE_HOST: docker-host
       # The async tier is more permissive

@@ -10,3 +10,4 @@ config/configatron/local.rb
 tmp/
 log/*
 vendor/
+.cryogen/secret.key
