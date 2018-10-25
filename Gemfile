@@ -8,7 +8,7 @@ gem 'sentry-raven', require: false
 gem 'skylight', '~> 1.4.4'
 
 gem 'activesupport', require: 'active_support/all'
-gem 'elasticsearch'
+gem 'elasticsearch', '~> 1.1'
 gem 'elasticsearch-dsl'
 
 ***REMOVED***
@@ -23,6 +23,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'elasticsearch-extensions' # provides the Test::Cluster
   gem 'factory_bot'
   gem 'faker'
   gem 'rspec'

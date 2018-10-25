@@ -30,3 +30,11 @@ configatron.field_encryption do |e|
   e.fe_keys = { 'AES|1' => Base64.decode64(ENV['FIELD_ENCRYPTION_KEY']) }
   e.current_scheme = e.fe_keys.keys.last
 end
+
+configatron.elasticsearch do |es|
+  es.timeout = ENV['ELASTICSEARCH_TIMEOUT'] || 15
+  es.retries = ENV['ELASTICSEARCH_RETRIES'] || 1
+  es.hosts = (ENV['ELASTICSEARCH_HOSTS'] || 'localhost:9200').split(',')
+  es.voter_record_index = ENV['ELASTICSEARCH_INDEX'] || 'votizen_verifier'
+  es.voter_record_doc_type = ENV['ELASTICSEARCH_DOC_TYPE'] || 'voters'
+end
