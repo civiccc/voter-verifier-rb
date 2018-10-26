@@ -39,12 +39,12 @@ optional_env_var CRYOGEN_KEY
 # developer cluster console support
 if [ -n "${SSH_AUTH_SOCK+x}" ]; then
   volume "${SSH_AUTH_SOCK}:/tmp/ssh-auth-sock"
-
-  volume "$HOME/.ssh:/home/app/.ssh"
-  volume "/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
-
   env_var SSH_AUTH_SOCK /tmp/ssh-auth-sock
 fi
+
+# Mount user SSH configuration for deployments and Chronos job execution
+volume "$HOME/.ssh:/home/app/.ssh"
+volume "/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
 
 # Capture the user deloying (used by script/jenkins-deploy)
 if [ -z "${DEPLOYER+x}" ]; then
