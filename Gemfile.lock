@@ -1,6 +1,6 @@
 GIT
 ***REMOVED***
-  revision: 940455d5a9eefcf35504417ff30aca2566b6a50a
+  revision: eddaeefc7058bbff68951d41b002dea828f8d949
   specs:
     service_utilities (0.0.0)
       activemodel (> 4.0, < 6.0)
@@ -16,7 +16,7 @@ GIT
 
 GIT
 ***REMOVED***
-  revision: 14ce1770856cae965a850c136b10f56c0854e02c
+  revision: ad643e061b49bce78f81e2c9203740fd4088ac7c
   specs:
     thrift_shop (0.0.1)
       thrift
@@ -73,7 +73,7 @@ GEM
     minitest (5.11.3)
     multi_json (1.13.1)
     multipart-post (2.0.0)
-    oj (3.6.13)
+    oj (3.7.0)
     overcommit (0.44.0)
       childprocess (~> 0.6, >= 0.6.3)
       iniparse (~> 1.4)

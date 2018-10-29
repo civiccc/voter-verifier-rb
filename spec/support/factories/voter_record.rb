@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :voter_record, class: VoterRecord do
+  factory :voter_record do
     activist_score '54.3'
     address '524 THIRD ST'
     address_apt_number nil
@@ -108,6 +108,15 @@ FactoryBot.define do
     voter_score 'Frequent Voter'
     zip_code '94105'
 
-    initialize_with { new(attributes) }
+    score 10
+    auto_verify true
+
+    initialize_with do
+      new(
+        attributes.except(:auto_verify, :score),
+        score: attributes[:score],
+        auto_verify: attributes[:auto_verify],
+      )
+    end
   end
 end

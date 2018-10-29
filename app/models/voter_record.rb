@@ -46,12 +46,13 @@ class VoterRecord
     ],
   )
 
-  # This is the Elasticsearch match score
-  attr_reader :score
+  # Score is the Elasticsearch match score
+  attr_reader :score, :auto_verify
 
-  def initialize(document, score: nil)
+  def initialize(document, score: nil, auto_verify: false)
     @document = document.deep_symbolize_keys!
     @score = score
+    @auto_verify = auto_verify
   end
 
   def method_missing(name, *args)
@@ -65,6 +66,13 @@ class VoterRecord
   end
 
   def to_thrift
+    begin
+      parsed_registration_date = Date.parse(registration_date)
+    # TypeError when request.dob is nil, ArgumentError when it's invalid as a date
+    rescue TypeError, ArgumentError
+      parsed_registration_date = nil
+    end
+
     ThriftShop::Verification::VoterRecord.new(
       id: id,
       exact_track: ts_exact_track,
@@ -75,7 +83,7 @@ class VoterRecord
       address: thrift_address,
       location: thrift_location,
       party: POLITICAL_PARTY_TO_THRIFT[party],
-      registration_date: Date.parse(registration_date).iso8601,
+      registration_date: parsed_registration_date&.iso8601,
       email: email,
       email_append_level: EMAIL_APPEND_LEVEL_TO_THRIFT[email_append_level],
       voter_score: VOTER_SCORE_TO_THRIFT[voter_score],
@@ -90,6 +98,7 @@ class VoterRecord
       general_vote_types: thrift_general_vote_types,
       primary_vote_types: thrift_primary_vote_types,
       scores: thrift_scores,
+      auto_verify: auto_verify,
     )
   end
 
@@ -164,11 +173,13 @@ class VoterRecord
       res ? new(res['_source']) : nil
     end
 
-    def search(query)
+    def search(query, auto_verify_results: false)
       return [] if query.nil?
 
       res = client.search(index: index, type: doc_type, body: query)
-      res['hits']['hits'].map { |hit| new(hit['_source'], score: hit['_score']) }
+      res['hits']['hits'].map do |hit|
+        new(hit['_source'], score: hit['_score'], auto_verify: auto_verify_results)
+      end
     end
 
     private

@@ -173,6 +173,18 @@ RSpec.describe VoterRecord do
       expect(subject.scores).
         to match expected_scores_attributes
     end
+
+    context 'when registration_date is nil' do
+      let(:voter_record) { build(:voter_record, registration_date: nil) }
+
+      it { is_expected.to be_an_instance_of(ThriftShop::Verification::VoterRecord) }
+      it { is_expected.to have_attributes(registration_date: nil) }
+    end
+
+    context 'when auto_verify is true' do
+      let(:voter_record) { build(:voter_record, auto_verify: true) }
+      it { is_expected.to have_attributes(auto_verify: true) }
+    end
   end
 
   describe '.get' do
@@ -254,14 +266,32 @@ RSpec.describe VoterRecord do
       expect(described_class).to have_received(:new).
         exactly(mocked_hits.length).times
       expect(described_class).to have_received(:new).
-        with(mocked_hits[0]['_source'], score: mocked_hits[0]['_score'])
+        with(mocked_hits[0]['_source'], hash_including(score: mocked_hits[0]['_score']))
       expect(described_class).to have_received(:new).
-        with(mocked_hits[1]['_source'], score: mocked_hits[1]['_score'])
+        with(mocked_hits[1]['_source'], hash_including(score: mocked_hits[1]['_score']))
     end
 
     context 'when the query is nil' do
       let(:query) { nil }
       it { is_expected.to eq [] }
+    end
+
+    context 'when called with auto_verify_results set to true' do
+      subject { described_class.search(query, auto_verify_results: true) }
+
+      it 'sets the auto_verify flag on the result set' do
+        subject
+        expect(described_class).to have_received(:new).
+          with(
+            mocked_hits[0]['_source'],
+            hash_including(score: mocked_hits[0]['_score'], auto_verify: true),
+          )
+        expect(described_class).to have_received(:new).
+          with(
+            mocked_hits[1]['_source'],
+            hash_including(score: mocked_hits[1]['_score'], auto_verify: true),
+          )
+      end
     end
   end
 end
