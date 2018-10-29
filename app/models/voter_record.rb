@@ -46,8 +46,12 @@ class VoterRecord
     ],
   )
 
-  def initialize(document)
+  # This is the Elasticsearch match score
+  attr_reader :score
+
+  def initialize(document, score: nil)
     @document = document.deep_symbolize_keys!
+    @score = score
   end
 
   def method_missing(name, *args)
@@ -161,8 +165,10 @@ class VoterRecord
     end
 
     def search(query)
+      return [] if query.nil?
+
       res = client.search(index: index, type: doc_type, body: query)
-      res['hits']['hits'].map { |hit| new hit['_source'] }
+      res['hits']['hits'].map { |hit| new(hit['_source'], score: hit['_score']) }
     end
 
     private

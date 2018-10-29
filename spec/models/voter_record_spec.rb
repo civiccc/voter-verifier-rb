@@ -200,6 +200,9 @@ RSpec.describe VoterRecord do
       end
 
       it { is_expected.to be_an_instance_of(described_class) }
+      it do
+        is_expected.to have_attributes(first_name: 'Testy', last_name: 'McTesterson')
+      end
     end
 
     context 'when the id does not match a record' do
@@ -220,8 +223,14 @@ RSpec.describe VoterRecord do
 
     let(:mocked_hits) do
       [
-        { '_source' => { 'first_name' => 'Testy', 'last_name' => 'McTesterson' } },
-        { '_source' => { 'first_name' => 'Testerson, Sr.', 'last_name' => 'McTesterson' } },
+        {
+          '_score' => 12,
+          '_source' => { 'first_name' => 'Testy', 'last_name' => 'McTesterson' },
+        },
+        {
+          '_score' => 10,
+          '_source' => { 'first_name' => 'Testerson, Sr.', 'last_name' => 'McTesterson' },
+        },
       ]
     end
 
@@ -245,9 +254,14 @@ RSpec.describe VoterRecord do
       expect(described_class).to have_received(:new).
         exactly(mocked_hits.length).times
       expect(described_class).to have_received(:new).
-        with(mocked_hits[0]['_source'])
+        with(mocked_hits[0]['_source'], score: mocked_hits[0]['_score'])
       expect(described_class).to have_received(:new).
-        with(mocked_hits[1]['_source'])
+        with(mocked_hits[1]['_source'], score: mocked_hits[1]['_score'])
+    end
+
+    context 'when the query is nil' do
+      let(:query) { nil }
+      it { is_expected.to eq [] }
     end
   end
 end
