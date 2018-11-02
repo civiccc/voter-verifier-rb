@@ -1,4 +1,4 @@
-RSpec.describe SearchHandler do
+RSpec.describe VoterRecordSearchHandler do
   subject(:handler) { described_class }
 
   let(:headers) do

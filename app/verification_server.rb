@@ -3,7 +3,8 @@ require_relative '../config/init'
 # VerificationServer initializes and starts an instance of ThriftServer
 class VerificationServer
   HANDLERS = [
-    SearchHandler,
+    VoterRecordSearchHandler,
+    VoterRecordHandler,
   ].freeze
 
   def initialize

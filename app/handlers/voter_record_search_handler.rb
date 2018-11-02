@@ -1,5 +1,5 @@
-# RPC handlers for searching voting vecords
-class SearchHandler < ThriftServer::ThriftHandler
+# RPC handlers for searching voting records
+class VoterRecordSearchHandler < ThriftServer::ThriftHandler
   include ThriftServer::Middleware::SkylightInstrumentation::Mixin
   include EnumConversion
   include Validation
