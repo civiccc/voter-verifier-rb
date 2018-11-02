@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :search_query_args, class: Hash do
+  factory :voter_search_query_args, class: Hash do
     first_name 'Testy'
     middle_name 'Quincy'
     last_name 'McTesterson'

@@ -3,6 +3,7 @@ namespace :search do
     last_name
     first_name
     middle_name
+    email
     dob
     zip_code
     city
@@ -27,6 +28,7 @@ namespace :search do
       city: ENV['city'],
       state: ENV['state'],
       street_address: ENV['street'],
+      email: ENV['email'],
     }
 
     VoterVerification::SearchPrinter.new(search_args: search_args).run
@@ -36,6 +38,7 @@ namespace :search do
     last_name
     first_name
     middle_name
+    email
     dob
     zip_code
     city
@@ -60,6 +63,7 @@ namespace :search do
       city: ENV['city'],
       state: ENV['state'],
       street_address: ENV['street'],
+      email: ENV['email'],
     }
     VoterVerification::SearchPrinter.new(search_args: search_args, verbose: true).run
   end

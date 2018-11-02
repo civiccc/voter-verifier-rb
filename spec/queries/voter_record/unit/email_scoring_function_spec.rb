@@ -4,7 +4,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Email do
   describe '::exact' do
     subject(:exact) { described_class.exact(email) }
     let(:email) { 'testy.mctesterson@example.com' }
-    let(:expected_boost_factor) { 5 }
+    let(:expected_boost_factor) { 8 }
 
     before { allow(Queries::VoterRecord::Clauses::Email).to receive(:exact) { mocked_clause } }
 

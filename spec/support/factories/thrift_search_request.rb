@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :thrift_search_request,
-          parent: :search_query_args,
+          parent: :voter_search_query_args,
           class: ThriftShop::Verification::SearchRequest do
     max_results 3
 

@@ -1,5 +1,5 @@
 RSpec.describe VoterVerification::Search do
-  let(:query_args) { build(:search_query_args) }
+  let(:query_args) { build(:voter_search_query_args) }
   let(:max_results) { 10 }
   let(:voter_record) { build(:voter_record) }
   let(:smart_search_service) do
@@ -58,14 +58,14 @@ RSpec.describe VoterVerification::Search do
         let(:mocked_results) { [voter_record, build(:voter_record, score: 10)] }
 
         context 'when the top auto result is significantly higher than the next result' do
-          let(:query_args) { build(:search_query_args) }
+          let(:query_args) { build(:voter_search_query_args) }
           let(:voter_record) { build(:voter_record, score: 35) }
 
           it { is_expected.to eq [mocked_results[0, 1], true] }
         end
 
         context 'when the top auto result has nearly the same score as the next result' do
-          let(:query_args) { build(:search_query_args) }
+          let(:query_args) { build(:voter_search_query_args) }
           let(:voter_record) { build(:voter_record, score: 11) }
 
           it { is_expected.to eq [mocked_results, false] }
@@ -82,7 +82,7 @@ RSpec.describe VoterVerification::Search do
       end
 
       context 'and results are not auto-verified' do
-        let(:query_args) { build(:search_query_args, first_name: nil, middle_name: nil) }
+        let(:query_args) { build(:voter_search_query_args, first_name: nil, middle_name: nil) }
         let(:voter_record) { build(:voter_record, first_name: nil, middle_name: nil) }
 
         before do

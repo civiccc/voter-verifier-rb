@@ -20,7 +20,7 @@ module VoterVerification
       non_verbose do
         puts "\tScore\tAuto?\tDocument"
         results.each_with_index.map do |res, i|
-          values = %i[id last_name first_name middle_name dob zip_code city st].
+          values = %i[id last_name first_name middle_name email dob zip_code city st].
             map { |k| "#{k}: #{res.public_send(k)}" }.join(', ')
           puts "#{i + 1}\t#{res.score}\t#{auto_verify}\t#{values}"
         end

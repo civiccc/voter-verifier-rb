@@ -4,6 +4,9 @@ RSpec.describe Queries::VoterRecord::Query do
   let(:last_name) { 'McTesterson' }
   let(:dob) { Time.new 2014, 8, 1 }
   let(:zip_code) { '94105' }
+  let(:street_address) { '***REMOVED***' }
+  let(:city) { 'San Francisco' }
+  let(:state) { 'CA' }
 
   subject do
     described_class.new(
@@ -12,8 +15,35 @@ RSpec.describe Queries::VoterRecord::Query do
       last_name: last_name,
       dob: dob,
       zip_code: zip_code,
+      street_address: street_address,
+      city: city,
+      state: state,
       size: 3,
     )
+  end
+
+  describe '#auto' do
+    subject { super().auto.to_hash }
+
+    context 'when dob is nil' do
+      let(:dob) { nil }
+
+      it { is_expected.to match hash_including(min_score: described_class::MIN_SCORE_AUTO_NO_DOB) }
+    end
+
+    context 'when dob is not nil' do
+      it do
+        is_expected.to match hash_including(
+          min_score: described_class::MIN_SCORE_AUTO_WITH_DOB,
+        )
+      end
+    end
+  end
+
+  describe '#top' do
+    subject { super().top.to_hash }
+
+    it { is_expected.to match hash_including(min_score: described_class::MIN_SCORE_TOP) }
   end
 
   describe '#can_auto_verify?' do

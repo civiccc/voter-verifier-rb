@@ -16,13 +16,17 @@ module Queries
     # - top: A somewhat permissive search intended to find either a single, high-confidence match
     #        or multiple medium-confidence matches (or no matches)
     class Query
+      MIN_SCORE_AUTO_WITH_DOB = 14.9
+      MIN_SCORE_AUTO_NO_DOB = 11.9
+      MIN_SCORE_TOP = 7.9
+
       attr_reader :alt_first_name, :alt_middle_name, :alt_last_name, :dob, :first_name,
                   :middle_name, :lng, :last_name, :lat
 
       def initialize(last_name:, size:, first_name: nil, middle_name: nil,
                      alt_first_name: nil, alt_middle_name: nil, alt_last_name: nil,
                      street_address: nil, city: nil, state: nil, zip_code: nil,
-                     dob: nil, email: nil, phone: nil)
+                     dob: nil, email: nil, phone: nil, min_score: 1.0)
         preprocessed_address = Preprocessors::Address.preprocess(
           street_address, city, state, zip_code
         )
@@ -80,7 +84,9 @@ module Queries
           end
         end
 
-        build(filters)
+        min_score = dob.nil? ? MIN_SCORE_AUTO_NO_DOB : MIN_SCORE_AUTO_WITH_DOB
+
+        build(filters, min_score)
       end
 
       def top
@@ -112,7 +118,7 @@ module Queries
           end
         end
 
-        build(filters)
+        build(filters, MIN_SCORE_TOP)
       end
 
       private
@@ -159,9 +165,10 @@ module Queries
         functions.flatten
       end
 
-      def build(filters)
+      def build(filters, min_score)
         functions = function_scores
         size = @size
+
         search do
           query do
             function_score do
@@ -171,7 +178,7 @@ module Queries
             end
           end
 
-          min_score 1.0
+          min_score min_score
           size size
         end
       end

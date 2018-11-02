@@ -9,7 +9,7 @@ module Queries
 
         def self.exact(value)
           filter = Clauses::Email.exact(Search::Filter.new, value)
-          boost_factor(5, filter)
+          boost_factor(8, filter)
         end
       end
     end
