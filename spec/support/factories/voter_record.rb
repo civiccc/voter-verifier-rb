@@ -109,14 +109,7 @@ FactoryBot.define do
     zip_code '94105'
 
     score 10
-    auto_verify true
 
-    initialize_with do
-      new(
-        attributes.except(:auto_verify, :score),
-        score: attributes[:score],
-        auto_verify: attributes[:auto_verify],
-      )
-    end
+    initialize_with { new(attributes.except(:score), score: attributes[:score]) }
   end
 end

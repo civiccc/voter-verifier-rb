@@ -47,12 +47,15 @@ class VoterRecord
   )
 
   # Score is the Elasticsearch match score
-  attr_reader :score, :auto_verify
+  attr_reader :score
 
-  def initialize(document, score: nil, auto_verify: false)
+  def initialize(document, score: nil)
     @document = document.deep_symbolize_keys!
     @score = score
-    @auto_verify = auto_verify
+  end
+
+  def ==(other)
+    id == other.id
   end
 
   def method_missing(name, *args)
@@ -98,7 +101,6 @@ class VoterRecord
       general_vote_types: thrift_general_vote_types,
       primary_vote_types: thrift_primary_vote_types,
       scores: thrift_scores,
-      auto_verify: auto_verify,
     )
   end
 
@@ -173,13 +175,11 @@ class VoterRecord
       res ? new(res['_source']) : nil
     end
 
-    def search(query, auto_verify_results: false)
+    def search(query)
       return [] if query.nil?
 
       res = client.search(index: index, type: doc_type, body: query)
-      res['hits']['hits'].map do |hit|
-        new(hit['_source'], score: hit['_score'], auto_verify: auto_verify_results)
-      end
+      res['hits']['hits'].map { |hit| new(hit['_source'], score: hit['_score']) }
     end
 
     private

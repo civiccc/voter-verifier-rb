@@ -10,7 +10,6 @@ FactoryBot.define do
     city 'San Francisco'
     state 'CA'
     zip_code '94118'
-    max_results 3
 
     initialize_with { attributes }
   end

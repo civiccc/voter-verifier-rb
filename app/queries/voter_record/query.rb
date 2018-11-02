@@ -19,7 +19,7 @@ module Queries
       attr_reader :alt_first_name, :alt_middle_name, :alt_last_name, :dob, :first_name,
                   :middle_name, :lng, :last_name, :lat
 
-      def initialize(last_name:, max_results:, first_name: nil, middle_name: nil,
+      def initialize(last_name:, size:, first_name: nil, middle_name: nil,
                      alt_first_name: nil, alt_middle_name: nil, alt_last_name: nil,
                      street_address: nil, city: nil, state: nil, zip_code: nil,
                      dob: nil, email: nil, phone: nil)
@@ -31,7 +31,7 @@ module Queries
           alt_first_name, alt_middle_name, alt_last_name
         )
 
-        @max_results = max_results
+        @size = size
 
         @first_name, @middle_name, @last_name = preprocessed_name.values_at(
         :first, :middle, :last
@@ -161,7 +161,7 @@ module Queries
 
       def build(filters)
         functions = function_scores
-        max_results = @max_results
+        size = @size
         search do
           query do
             function_score do
@@ -172,7 +172,7 @@ module Queries
           end
 
           min_score 1.0
-          size max_results
+          size size
         end
       end
 

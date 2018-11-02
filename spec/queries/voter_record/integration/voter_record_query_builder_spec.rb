@@ -17,7 +17,7 @@ RSpec.describe Queries::VoterRecord::Query do
 
   subject do
     described_class.new(
-      max_results: 3,
+      size: 3,
       first_name: first_name,
       middle_name: middle_name,
       last_name: last_name,

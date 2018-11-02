@@ -17,8 +17,8 @@ class SearchHandler < ThriftServer::ThriftHandler
       parsed_dob = nil
     end
 
-    matches = VoterVerification::Search.new(
-      {
+    matches, auto_verify = VoterVerification::Search.new(
+      query_args: {
         last_name: request.last_name,
         first_name: request.first_name,
         middle_name: request.middle_name,
@@ -31,14 +31,15 @@ class SearchHandler < ThriftServer::ThriftHandler
         city: request.city,
         state: thrift_to_state_code(enum: request.state),
         zip_code: request.zip_code,
-
-        max_results: request.max_results,
       },
+      max_results: request.max_results,
       smart_search: true,
     ).run
 
+    thrift_matches = matches.map(&:to_thrift).each { |record| record.auto_verify = auto_verify }
+
     ThriftShop::Verification::VoterRecords.new(
-      voter_records: matches.map(&:to_thrift),
+      voter_records: thrift_matches,
     )
   end
 end

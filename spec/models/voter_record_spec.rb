@@ -11,6 +11,28 @@ RSpec.describe VoterRecord do
     allow(described_class).to receive(:doc_type).and_return(doc_type)
   end
 
+  describe '#==' do
+    let(:document_id) { 'CA-123456' }
+    let(:other_document_id) { 'NY-987654' }
+    let(:voter_record) { build(:voter_record, id: document_id) }
+    let(:other_voter_record) { build(:voter_record, id: other_document_id) }
+    subject { voter_record == other_voter_record }
+
+    context 'when they are the same object' do
+      let(:other_voter_record) { voter_record }
+      it { is_expected.to be true }
+    end
+
+    context 'when they have the same document id' do
+      let(:other_voter_record) { build(:voter_record, id: document_id) }
+      it { is_expected.to be true }
+    end
+
+    context 'when they do not have the same document id' do
+      it { is_expected.to be false }
+    end
+  end
+
   describe '#method_missing' do
     context 'when the name is a key in the underlying document' do
       subject { voter_record.first_name }
@@ -180,11 +202,6 @@ RSpec.describe VoterRecord do
       it { is_expected.to be_an_instance_of(ThriftShop::Verification::VoterRecord) }
       it { is_expected.to have_attributes(registration_date: nil) }
     end
-
-    context 'when auto_verify is true' do
-      let(:voter_record) { build(:voter_record, auto_verify: true) }
-      it { is_expected.to have_attributes(auto_verify: true) }
-    end
   end
 
   describe '.get' do
@@ -232,20 +249,26 @@ RSpec.describe VoterRecord do
     let(:query) do
       Elasticsearch::DSL::Search::Search.new { query { term last_name: 'McTesterson' } }
     end
-
     let(:mocked_hits) do
       [
         {
           '_score' => 12,
-          '_source' => { 'first_name' => 'Testy', 'last_name' => 'McTesterson' },
+          '_source' => {
+            'id' => 'CA-123456',
+            'first_name' => 'Testy',
+            'last_name' => 'McTesterson',
+          },
         },
         {
           '_score' => 10,
-          '_source' => { 'first_name' => 'Testerson, Sr.', 'last_name' => 'McTesterson' },
+          '_source' => {
+            'id' => 'NY-987654',
+            'first_name' => 'Testerson, Sr.',
+            'last_name' => 'McTesterson',
+          },
         },
       ]
     end
-
     let(:mocked_es_results) { { 'hits' => { 'hits' => mocked_hits } } }
 
     before do
@@ -259,39 +282,18 @@ RSpec.describe VoterRecord do
         with(hash_including(body: query, index: index, type: doc_type))
     end
 
-    it { is_expected.to be_an_instance_of(Array) }
-
-    it 'Returns VoterRecords from the hits' do
-      subject
-      expect(described_class).to have_received(:new).
-        exactly(mocked_hits.length).times
-      expect(described_class).to have_received(:new).
-        with(mocked_hits[0]['_source'], hash_including(score: mocked_hits[0]['_score']))
-      expect(described_class).to have_received(:new).
-        with(mocked_hits[1]['_source'], hash_including(score: mocked_hits[1]['_score']))
+    it do
+      is_expected.to eq(
+        [
+          VoterRecord.new(mocked_hits[0]['_source'], score: mocked_hits[0]['_score']),
+          VoterRecord.new(mocked_hits[1]['_source'], score: mocked_hits[1]['_score']),
+        ],
+      )
     end
 
     context 'when the query is nil' do
       let(:query) { nil }
       it { is_expected.to eq [] }
-    end
-
-    context 'when called with auto_verify_results set to true' do
-      subject { described_class.search(query, auto_verify_results: true) }
-
-      it 'sets the auto_verify flag on the result set' do
-        subject
-        expect(described_class).to have_received(:new).
-          with(
-            mocked_hits[0]['_source'],
-            hash_including(score: mocked_hits[0]['_score'], auto_verify: true),
-          )
-        expect(described_class).to have_received(:new).
-          with(
-            mocked_hits[1]['_source'],
-            hash_including(score: mocked_hits[1]['_score'], auto_verify: true),
-          )
-      end
     end
   end
 end

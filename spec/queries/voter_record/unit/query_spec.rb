@@ -12,7 +12,7 @@ RSpec.describe Queries::VoterRecord::Query do
       last_name: last_name,
       dob: dob,
       zip_code: zip_code,
-      max_results: 3,
+      size: 3,
     )
   end
 

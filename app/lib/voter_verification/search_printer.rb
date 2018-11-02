@@ -1,25 +1,31 @@
 module VoterVerification
-  # Execute a search with the given query arguments and output results to stdout.
+  # Execute a search with the given search arguments
+  # and output results to stdout.
   class SearchPrinter
-    def initialize(query_args:, verbose: false)
-      @query_args = query_args
+    def initialize(search_args:, verbose: false)
+      @search_args = search_args
       @verbose = verbose
     end
 
     def run
-      verbose { puts "Query args: #{@query_args}" }
-      search = VoterVerification::Search.new(@query_args, smart_search: true)
+      verbose { puts "Query args: #{@search_args}" }
+      search = VoterVerification::Search.new(
+        query_args: @search_args.except(:max_results),
+        max_results: @search_args[:max_results],
+        smart_search: true,
+      )
       verbose { puts JSON.pretty_generate(search.query.top.to_hash) }
-      results = search.run
+      results, auto_verify = search.run
+      verbose { puts "Auto? #{auto_verify}" }
       non_verbose do
-        puts "Score\tAuto?\tDocument"
-        results.map do |res|
+        puts "\tScore\tAuto?\tDocument"
+        results.each_with_index.map do |res, i|
           values = %i[id last_name first_name middle_name dob zip_code city st].
             map { |k| "#{k}: #{res.public_send(k)}" }.join(', ')
-          puts "#{res.score}\t#{res.auto_verify}\t#{values}"
+          puts "#{i + 1}\t#{res.score}\t#{auto_verify}\t#{values}"
         end
       end
-      verbose { results.map { |res| puts "#{res.inspect}\n\n" } }
+      verbose { results.map { |res| puts "score: #{res.score}\nhit: #{res.inspect}\n\n" } }
     end
 
     private

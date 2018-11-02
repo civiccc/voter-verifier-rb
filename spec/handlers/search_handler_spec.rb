@@ -25,12 +25,14 @@ RSpec.describe SearchHandler do
 
     context 'when request is valid' do
       before do
-        allow_any_instance_of(VoterVerification::Search).to receive(:run).and_return([voter_record])
+        allow_any_instance_of(VoterVerification::Search).to(
+          receive(:run).and_return([[voter_record], false]),
+        )
       end
 
       it 'calls SearchService#run' do
         expect_any_instance_of(VoterVerification::Search).to(
-          receive(:run).and_return([voter_record]),
+          receive(:run).and_return([[voter_record], false]),
         )
         subject
       end
@@ -40,6 +42,26 @@ RSpec.describe SearchHandler do
       it 'has an array of thrift voter records' do
         expect(subject.voter_records).
           to(match all(an_instance_of(ThriftShop::Verification::VoterRecord)))
+      end
+
+      context 'when the results are auto-verifiable' do
+        before do
+          allow_any_instance_of(VoterVerification::Search).to(
+            receive(:run).and_return([[voter_record], true]),
+          )
+        end
+
+        it { expect(subject.voter_records[0]).to have_attributes(auto_verify: true) }
+      end
+
+      context 'when the results are not auto-verifiable' do
+        before do
+          allow_any_instance_of(VoterVerification::Search).to(
+            receive(:run).and_return([[voter_record], false]),
+          )
+        end
+
+        it { expect(subject.voter_records[0]).to have_attributes(auto_verify: false) }
       end
     end
 
