@@ -7,7 +7,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
 
     describe '::city_state' do
       subject(:city_state) { described_class.city_state(city, state) }
-      let(:expected_boost_factor) { 2 }
+      let(:expected_boost_factor) { 1 }
 
       before do
         allow(Queries::VoterRecord::Clauses::Address::City).to receive(:exact) { mocked_clause }
@@ -28,13 +28,26 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
         )
       end
 
-      it { is_expected.to match(a_hash_including(boost_factor: expected_boost_factor)) }
+      it do
+        is_expected.to match_array(
+          [
+            hash_including(boost_factor: expected_boost_factor),
+            hash_including(boost_factor: expected_boost_factor),
+          ],
+        )
+      end
     end
 
     describe '::street_city_and_state' do
       subject(:city_state) { described_class.street_city_and_state(street_address, city, state) }
       let(:street_address) { '***REMOVED***' }
-      let(:expected_boost_factor) { 3 }
+      let(:expected) do
+        [
+          hash_including(boost_factor: 1),
+          hash_including(boost_factor: 1),
+          hash_including(boost_factor: 1),
+        ]
+      end
 
       before do
         allow(Queries::VoterRecord::Clauses::Address::City).to receive(:exact) { mocked_clause }
@@ -47,25 +60,25 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
       it 'calls the City::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::City).to(
-          have_received(:exact).with(instance_of(Search::Filters::And), city),
+          have_received(:exact).with(instance_of(Search::Filters::And), city).at_least(1),
         )
       end
 
       it 'calls the State::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::State).to(
-          have_received(:exact).with(instance_of(Search::Filters::And), state),
+          have_received(:exact).with(instance_of(Search::Filters::And), state).at_least(1),
         )
       end
 
       it 'calls the StreetAddress::fuzzy clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::StreetAddress).to(
-          have_received(:fuzzy).with(instance_of(Search::Filters::And), street_address),
+          have_received(:fuzzy).with(instance_of(Search::Filters::And), street_address).at_least(1),
         )
       end
 
-      it { is_expected.to match(a_hash_including(boost_factor: expected_boost_factor)) }
+      it { is_expected.to match_array(expected) }
     end
   end
 

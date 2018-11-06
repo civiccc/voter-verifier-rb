@@ -18,10 +18,10 @@ module Queries
     class Query
       MIN_SCORE_AUTO_WITH_DOB = 14.9
       MIN_SCORE_AUTO_NO_DOB = 11.9
-      MIN_SCORE_TOP = 7.9
+      MIN_SCORE_TOP = 7.0
 
       attr_reader :alt_first_name, :alt_middle_name, :alt_last_name, :dob, :first_name,
-                  :middle_name, :lng, :last_name, :lat
+                  :middle_name, :lng, :last_name, :lat, :street_address, :city, :state, :zip_code
 
       def initialize(last_name:, size:, first_name: nil, middle_name: nil,
                      alt_first_name: nil, alt_middle_name: nil, alt_last_name: nil,
@@ -45,7 +45,7 @@ module Queries
         )
 
         @street_address, @city, @state, @zip_code, @lat, @lng = preprocessed_address.
-          values_at(street_address, :city, :state, :zip_code, :lat, :lng)
+          values_at(:street_address, :city, :state, :zip_code, :lat, :lng)
 
         @dob = dob
         @email = email
@@ -144,20 +144,17 @@ module Queries
           functions << ScoreFunctions::DOB::Day.exact_or_missing_or_is_first(@dob.day)
         end
 
-        if @zip_code.nil?
-          unless @city.nil? || @state.nil?
-            functions << ScoreFunctions::Address::Full.city_state(@city, @state)
-            unless @street_address.nil?
-              functions << ScoreFunctions::Address::Full.street_city_and_state(
-                @street_address, @city, @state
-              )
-            end
-          end
-        else
+        unless @zip_code.nil?
           functions << ScoreFunctions::Address::ZipCode.exact(@zip_code)
           unless @lat.nil? || @lng.nil?
             functions << ScoreFunctions::Address::LatLng.within('16km', @lat, @lng)
           end
+        end
+
+        unless @city.nil? || @state.nil?
+          functions << ScoreFunctions::Address::Full.street_city_and_state(
+            @street_address, @city, @state
+          )
         end
 
         functions << ScoreFunctions::Email.exact(@email) unless @email.nil?

@@ -19,7 +19,7 @@ namespace :search do
     end
 
     search_args = {
-      max_results: ENV['max_results'].to_i || 3,
+      max_results: (ENV['max_results'] || 3).to_i,
       last_name: ENV['last_name'],
       middle_name: ENV['middle_name'],
       first_name: ENV['first_name'],
@@ -54,7 +54,7 @@ namespace :search do
     end
 
     search_args = {
-      max_results: ENV['max_results'].to_i || 3,
+      max_results: (ENV['max_results'] || 3).to_i,
       last_name: ENV['last_name'],
       middle_name: ENV['middle_name'],
       first_name: ENV['first_name'],

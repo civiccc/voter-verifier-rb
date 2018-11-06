@@ -20,12 +20,24 @@ module VoterVerification
       non_verbose do
         puts "\tScore\tAuto?\tDocument"
         results.each_with_index.map do |res, i|
-          values = %i[id last_name first_name middle_name email dob zip_code city st].
+          values = %i[id last_name first_name middle_name email dob].
             map { |k| "#{k}: #{res.public_send(k)}" }.join(', ')
+          address = %i[address st city zip_code].
+            map { |k| "#{k}: #{res.public_send(k)}" }.join(', ')
+          ts_address = %i[ts_address ts_st ts_city ts_zip_code].
+            map { |k| "#{k}: #{res.public_send(k)}" }.join(', ')
+
           puts "#{i + 1}\t#{res.score}\t#{auto_verify}\t#{values}"
+          puts "\t\t\t#{address}"
+          puts "\t\t\t#{ts_address}"
+        end.empty? && 1.times.each { puts "\tNo results" }
+      end
+      verbose do
+        results.each do |res|
+          puts "score: #{res.score}"
+          puts "hit: #{res.inspect}"
         end
       end
-      verbose { results.map { |res| puts "score: #{res.score}\nhit: #{res.inspect}\n\n" } }
     end
 
     private

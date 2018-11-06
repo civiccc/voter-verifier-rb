@@ -12,20 +12,24 @@ module Queries
           extend BaseScoreFunction
 
           def self.city_state(city, state)
-            filter = Search::Filter.new._and do
+            city_filter = Search::Filter.new._and do
               Clauses::Address::City.exact(self, city)
               Clauses::Address::State.exact(self, state)
             end
-            boost_factor(2, filter)
+
+            state_filter = Clauses::Address::State.exact(Search::Filter.new, state)
+            [boost_factor(1, city_filter), boost_factor(1, state_filter)]
           end
 
           def self.street_city_and_state(street_address, city, state)
-            filter = Search::Filter.new._and do
+            street_address_filter = Search::Filter.new._and do
               Clauses::Address::StreetAddress.fuzzy(self, street_address)
               Clauses::Address::City.exact(self, city)
               Clauses::Address::State.exact(self, state)
             end
-            boost_factor(3, filter)
+            functions = city_state(city, state)
+            functions << boost_factor(1, street_address_filter) unless street_address.nil?
+            functions
           end
         end
 

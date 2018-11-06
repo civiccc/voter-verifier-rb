@@ -39,7 +39,7 @@ module Queries
 
           def self.exact(value)
             filter = Clauses::DOB::Month.exact(Search::Filter.new, value)
-            boost_factor(5, filter)
+            boost_factor(2, filter)
           end
 
           def self.is_missing

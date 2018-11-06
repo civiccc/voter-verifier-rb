@@ -26,7 +26,7 @@ module Queries
             {
               street_address: raw_street_address,
               city: raw_city,
-              state: raw_state,
+              state: raw_state&.upcase,
               zip_code: zip5,
               lat: lat_lng[:lat],
               lng: lat_lng[:lng],

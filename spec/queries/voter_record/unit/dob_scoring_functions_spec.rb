@@ -174,7 +174,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::DOB do
 
     describe '::exact' do
       subject(:exact) { described_class.exact(month) }
-      let(:expected_boost_factor) { 5 }
+      let(:expected_boost_factor) { 2 }
 
       before do
         allow(Queries::VoterRecord::Clauses::DOB::Month).to(

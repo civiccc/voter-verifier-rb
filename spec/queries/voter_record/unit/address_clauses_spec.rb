@@ -80,11 +80,11 @@ RSpec.describe Queries::VoterRecord::Clauses::Address do
       let(:expected) do
         {
           query: {
-            match_phrase: {
-              address: {
-                query: street_address,
-                slop: 2,
-              },
+            multi_match: {
+              fields: %i[address ts_address],
+              query: street_address,
+              slop: 2,
+              type: 'phrase',
             },
           },
         }

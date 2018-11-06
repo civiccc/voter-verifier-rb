@@ -43,9 +43,11 @@ module Queries
         module StreetAddress
           def self.fuzzy(parent_clause, value)
             parent_clause.query do
-              match_phrase :address do
+              multi_match do
+                fields %i[address ts_address]
                 query value
                 slop 2
+                type MultiMatchTypes::PHRASE
               end
             end
           end
