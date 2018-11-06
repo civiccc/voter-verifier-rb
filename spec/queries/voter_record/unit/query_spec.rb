@@ -46,6 +46,19 @@ RSpec.describe Queries::VoterRecord::Query do
     it { is_expected.to match hash_including(min_score: described_class::MIN_SCORE_TOP) }
   end
 
+  describe '#initialize' do
+    context 'with nil last_name' do
+      subject do
+        described_class.new(
+          last_name: nil,
+          size: 3,
+        )
+      end
+
+      it { is_expected.to be_a described_class }
+    end
+  end
+
   describe '#can_auto_verify?' do
     subject { super().send(:can_auto_verify?) }
 

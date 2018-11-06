@@ -20,10 +20,11 @@ module Queries
       MIN_SCORE_AUTO_NO_DOB = 11.9
       MIN_SCORE_TOP = 7.0
 
-      attr_reader :alt_first_name, :alt_middle_name, :alt_last_name, :dob, :first_name,
-                  :middle_name, :lng, :last_name, :lat, :street_address, :city, :state, :zip_code
+      attr_reader :alt_first_name, :alt_middle_name, :alt_last_name, :dob, :email, :first_name,
+                  :middle_name, :last_name, :lat, :lng, :phone, :street_address, :city, :state,
+                  :zip_code
 
-      def initialize(last_name:, size:, first_name: nil, middle_name: nil,
+      def initialize(size:, last_name: nil, first_name: nil, middle_name: nil,
                      alt_first_name: nil, alt_middle_name: nil, alt_last_name: nil,
                      street_address: nil, city: nil, state: nil, zip_code: nil,
                      dob: nil, email: nil, phone: nil, min_score: 1.0)
@@ -49,7 +50,7 @@ module Queries
 
         @dob = dob
         @email = email
-        @phone = phone
+        @phone = Preprocessors::Phone.preprocess(phone)
       end
 
       def auto
@@ -91,10 +92,19 @@ module Queries
 
       def top
         query = self
+
         filters = Search::Filter.new do
           bool do
             must do
-              Clauses::Name::Last.exact(self, query.last_name, query.alt_last_name)
+              # TODO enforce either last_name or one of email/phone
+              if !query.last_name.nil?
+                Clauses::Name::Last.exact(self, query.last_name, query.alt_last_name)
+              else
+                bool do
+                  should { Clauses::Email.exact(self, query.email) } unless query.email.nil?
+                  should { Clauses::Phone.exact(self, query.phone) } unless query.phone.nil?
+                end
+              end
             end
 
             unless query.first_name.nil? && query.middle_name.nil?
@@ -146,7 +156,7 @@ module Queries
 
         unless @zip_code.nil?
           functions << ScoreFunctions::Address::ZipCode.exact(@zip_code)
-          unless @lat.nil? || @lng.nil?
+          unless @lat.nil? || @lng.nil? || @last_name.nil?
             functions << ScoreFunctions::Address::LatLng.within('16km', @lat, @lng)
           end
         end
@@ -158,6 +168,7 @@ module Queries
         end
 
         functions << ScoreFunctions::Email.exact(@email) unless @email.nil?
+        functions << ScoreFunctions::Phone.exact(@phone) unless @phone.nil?
 
         functions.flatten
       end
@@ -181,8 +192,10 @@ module Queries
       end
 
       def can_auto_verify?
-        # dob/zip code not both nil and first_name/middle_name not both nil
-        !(@dob.nil? && @zip_code.nil?) && !(@first_name.nil? && @middle_name.nil?)
+        # last name not nil and dob/zip code not both nil and first_name/middle_name not both nil
+        !@last_name.nil? &&
+          !(@dob.nil? && @zip_code.nil?) &&
+          !(@first_name.nil? && @middle_name.nil?)
       end
     end
   end

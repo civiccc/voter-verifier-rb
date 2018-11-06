@@ -7,8 +7,13 @@ class VoterRecordSearchHandler < ThriftServer::ThriftHandler
   process ThriftShop::Verification::VerificationService, only: %i[search]
 
   handle :search do |_headers, request|
-    verify_field_presence(field: 'last_name', thrift_object: request)
     verify_field_presence(field: 'max_results', thrift_object: request)
+
+    if %i[last_name email phone].none? { |field| request.public_send(field) }
+      raise ThriftShop::Shared::ArgumentException,
+            message: 'Missing field: at least one of last_name, email or phone must be present',
+            code: ThriftShop::Shared::ArgumentExceptionCode::PRESENCE
+    end
 
     begin
       parsed_dob = Date.parse(request.dob)

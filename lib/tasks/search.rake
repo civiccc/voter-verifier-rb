@@ -29,6 +29,7 @@ namespace :search do
       state: ENV['state'],
       street_address: ENV['street'],
       email: ENV['email'],
+      phone: ENV['phone'],
     }
 
     VoterVerification::SearchPrinter.new(search_args: search_args).run
@@ -64,6 +65,7 @@ namespace :search do
       state: ENV['state'],
       street_address: ENV['street'],
       email: ENV['email'],
+      phone: ENV['phone'],
     }
     VoterVerification::SearchPrinter.new(search_args: search_args, verbose: true).run
   end

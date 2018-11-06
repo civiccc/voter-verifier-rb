@@ -16,6 +16,12 @@ RSpec.describe VoterRecordSearchHandler do
   describe '#search' do
     subject { handler.search(headers, request) }
 
+    before do
+      allow_any_instance_of(VoterVerification::Search).to(
+        receive(:run).and_return([[voter_record], false]),
+      )
+    end
+
     shared_examples 'has an array of voter records' do
       it do
         expect(subject.voter_records).
@@ -23,13 +29,27 @@ RSpec.describe VoterRecordSearchHandler do
       end
     end
 
-    context 'when request is valid' do
-      before do
-        allow_any_instance_of(VoterVerification::Search).to(
-          receive(:run).and_return([[voter_record], false]),
-        )
-      end
+    describe 'valid requests' do
+      context 'when last_name is nil' do
+        let(:request) do
+          build(:thrift_search_request, last_name: nil, phone: phone, email: email)
+        end
+        let(:email) { nil }
+        let(:phone) { nil }
 
+        context 'when email is not nil' do
+          let(:email) { 'test@example.com' }
+          it { is_expected.to be_an_instance_of(ThriftShop::Verification::VoterRecords) }
+        end
+
+        context 'when phone is not nil' do
+          let(:phone) { '1234567890' }
+          it { is_expected.to be_an_instance_of(ThriftShop::Verification::VoterRecords) }
+        end
+      end
+    end
+
+    context 'when request is valid' do
       it 'calls SearchService#run' do
         expect_any_instance_of(VoterVerification::Search).to(
           receive(:run).and_return([[voter_record], false]),
@@ -70,8 +90,8 @@ RSpec.describe VoterRecordSearchHandler do
         it { expect { subject }.to raise_error(ThriftShop::Shared::ArgumentException) }
       end
 
-      context 'because last_name is nil' do
-        let(:request) { build(:thrift_search_request, last_name: nil) }
+      context 'because last name, email and phone are  all nil' do
+        let(:request) { build(:thrift_search_request, last_name: nil, email: nil, phone: nil) }
         it_behaves_like 'raises an argument exception'
       end
 
