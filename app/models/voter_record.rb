@@ -1,10 +1,116 @@
 require 'service_utilities'
 
 # PORO wrapping elasticsearch results
-class VoterRecord
-  include EnumConversion
-
-  class ConfigError < RuntimeError; end
+class VoterRecord < ElasticSearchDocument
+  attributes %i[
+    activist_score
+    address
+    address_apt_number
+    address_street_name
+    address_street_number
+    address_unit_designator
+    campaign_finance_score
+    catholic_score
+    children_present_score
+    city
+    climate_change_score
+    college_funding_score
+    college_graduate_score
+    county
+    dob_day
+    dob_month
+    dob_year
+    effective_date
+    email
+    email_append_level
+    email_match_type
+    email_presence_flag
+    evangelical_score
+    first_name
+    first_name_compact
+    general_2000
+    general_2002
+    general_2004
+    general_2006
+    general_2008
+    general_2010
+    general_2012
+    general_2014
+    general_2016
+    govt_privacy_score
+    gun_control_score
+    gunowner_score
+    high_school_only_score
+    id
+    ideology_score
+    income_rank_score
+    last_name
+    last_name_compact
+    lat_lng_location
+    local_voter_score
+    marriage_score
+    middle_name
+    middle_name_compact
+    midterm_general_turnout_score
+    minimum_wage_score
+    moral_authority_score
+    moral_care_score
+    moral_equality_score
+    moral_equity_score
+    moral_loyalty_score
+    moral_purity_score
+    non_presidential_primary_turnout_score
+    nonchristian_score
+    num_general_election_votes
+    num_primary_election_votes
+    offyear_general_turnout_score
+    otherchristian_score
+    paid_leave_score
+    partisan_score
+    party
+    path_to_citizen_score
+    phone
+    presidential_general_turnout_score
+    presidential_primary_turnout_score
+    prochoice_score
+    race_afam_score
+    race_asian_score
+    race_hisp_score
+    race_natam_score
+    race_white_score
+    registration_date
+    st
+    status_flag
+    suffix
+    tax_on_wealthy_score
+    teaparty_score
+    trump_resistance_score
+    trump_support_score
+    ts_address
+    ts_address_apt_number
+    ts_address_street_name
+    ts_address_street_number
+    ts_address_unit_designator
+    ts_city
+    ts_exact_track
+    ts_lat_lng_location
+    ts_st
+    ts_wireless_phone
+    ts_zip_code
+    urbanicity_rank
+    vb_phone
+    vb_phone_type
+    vb_phone_wireless
+    veteran_score
+    vf_g2012
+    vf_g2014
+    vf_g2016
+    vf_p2012
+    vf_p2014
+    vf_p2016
+    voter_score
+    zip_code
+  ]
 
   POLITICAL_PARTY_TO_THRIFT = ThriftShop::Verification::PoliticalParty::VALUE_MAP.invert.
     transform_keys(&:titleize).freeze
@@ -45,28 +151,6 @@ class VoterRecord
       race_white
     ],
   )
-
-  # Score is the Elasticsearch match score
-  attr_reader :score
-
-  def initialize(document, score: nil)
-    @document = document.deep_symbolize_keys!
-    @score = score
-  end
-
-  def ==(other)
-    id == other.id
-  end
-
-  def method_missing(name, *args)
-    return @document[name] if @document.include?(name)
-
-    super
-  end
-
-  def respond_to_missing?(name, *args)
-    @document.include?(name) || super
-  end
 
   def to_thrift
     begin
@@ -114,21 +198,8 @@ class VoterRecord
 
   private
 
-  def ts_address_field(field_name)
-    send(field_name) || send("ts_#{field_name}")
-  end
-
   def thrift_address
-    ThriftShop::Verification::Address.new(
-      street: ts_address_field(:address),
-      apt_number: ts_address_field(:address_apt_number),
-      street_name: ts_address_field(:address_street_name),
-      street_number: ts_address_field(:address_street_number),
-      unit_designator: ts_address_field(:address_unit_designator),
-      city: ts_address_field(:city),
-      state: state_code_to_thrift(state_code: ts_address_field(:st)),
-      zip_code: ts_address_field(:zip_code),
-    )
+    VoterRecordAddress.new(@document).to_thrift
   end
 
   def thrift_scores
@@ -163,33 +234,6 @@ class VoterRecord
 
       stripped_key = str_key.gsub(pattern, '')
       hash[stripped_key] = block_given? ? yield(stripped_key, value) : value
-    end
-  end
-
-  class << self
-    attr_writer :client, :index, :doc_type
-
-    def get(id)
-      res = client.get(id: id, index: index, type: doc_type, ignore: 404)
-      # With "ignore: 404" ES client will return false if there's no matching record, we want nil
-      res ? new(res['_source']) : nil
-    end
-
-    def search(query)
-      return [] if query.nil?
-
-      res = client.search(index: index, type: doc_type, body: query)
-      res['hits']['hits'].map { |hit| new(hit['_source'], score: hit['_score']) }
-    end
-
-    private
-
-    attr_reader :index, :doc_type
-
-    def client
-      raise ConfigError, 'No Elasticsearch client configured' if @client.nil?
-
-      @client
     end
   end
 end

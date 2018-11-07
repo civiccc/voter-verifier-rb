@@ -91,7 +91,7 @@ FactoryBot.define do
     ts_city 'SAN FRANCISCO'
     ts_exact_track 'Y12345678901234'
     ts_lat_lng_location '35.1868,-106.6652'
-    ts_st 'NM'
+    ts_st 'CA'
     ts_wireless_phone '1234567892'
     ts_zip_code '94105'
     urbanicity_rank 42

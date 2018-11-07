@@ -50,7 +50,7 @@ RSpec.describe VoterRecordSearchHandler do
     end
 
     context 'when request is valid' do
-      it 'calls SearchService#run' do
+      it 'calls VoterVerification::Search#run' do
         expect_any_instance_of(VoterVerification::Search).to(
           receive(:run).and_return([[voter_record], false]),
         )

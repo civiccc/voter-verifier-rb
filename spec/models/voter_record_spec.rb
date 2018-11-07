@@ -33,19 +33,6 @@ RSpec.describe VoterRecord do
     end
   end
 
-  describe '#method_missing' do
-    context 'when the name is a key in the underlying document' do
-      subject { voter_record.first_name }
-      it { is_expected.to eq 'TESTY' }
-    end
-
-    context 'when the name is not a key in underlying document' do
-      it 'should raise' do
-        expect { voter_record.foo }.to raise_error(NoMethodError)
-      end
-    end
-  end
-
   describe '#to_thrift' do
     let(:expected_address_attributes) do
       {
