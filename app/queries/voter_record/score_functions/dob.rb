@@ -1,6 +1,4 @@
 require_relative 'base_score_function'
-require 'elasticsearch/dsl'
-include Elasticsearch::DSL # rubocop:disable Style/MixinUsage
 
 module Queries
   module VoterRecord
@@ -16,7 +14,7 @@ module Queries
           end
 
           def self.exact(value)
-            filter = Clauses::DOB::Year.exact(Search::Filter.new, value)
+            filter = Clauses::DOB::Year.exact(Queries::Filter.new, value)
             boost_factor(5, filter)
           end
         end
@@ -38,7 +36,7 @@ module Queries
           end
 
           def self.exact(value)
-            filter = Clauses::DOB::Month.exact(Search::Filter.new, value)
+            filter = Clauses::DOB::Month.exact(Queries::Filter.new, value)
             boost_factor(2, filter)
           end
 
@@ -47,7 +45,7 @@ module Queries
           end
 
           def self.missing_or_is_first
-            filter = Clauses::DOB::Month.missing_or_is_first(Search::Filter.new)
+            filter = Clauses::DOB::Month.missing_or_is_first(Queries::Filter.new)
             boost_factor(1, filter)
           end
         end
@@ -69,7 +67,7 @@ module Queries
           end
 
           def self.exact(value)
-            filter = Clauses::DOB::Day.exact(Search::Filter.new, value)
+            filter = Clauses::DOB::Day.exact(Queries::Filter.new, value)
             boost_factor(2, filter)
           end
 
@@ -78,7 +76,7 @@ module Queries
           end
 
           def self.missing_or_is_first
-            filter = Clauses::DOB::Day.missing_or_is_first(Search::Filter.new)
+            filter = Clauses::DOB::Day.missing_or_is_first(Queries::Filter.new)
             boost_factor(1, filter)
           end
         end

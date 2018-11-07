@@ -1,5 +1,7 @@
+require 'elasticsearch-dsl'
+
 RSpec.describe Queries::VoterRecord::Clauses::DOB do
-  let(:parent_clause) { Search::Filter.new }
+  let(:parent_clause) { Elasticsearch::DSL::Search::Filter.new }
 
   describe described_class::Day do
     let(:day) { 2 }

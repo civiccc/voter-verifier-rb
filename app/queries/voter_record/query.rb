@@ -1,8 +1,9 @@
 require 'elasticsearch/dsl'
-include Elasticsearch::DSL # rubocop:disable Style/MixinUsage
 
 # Query builder for searching the votizen_voter index in ElasticSearch
 module Queries
+  include Elasticsearch::DSL
+
   module VoterRecord
     # Definitions of document filter clauses used to narrow down results
     module Clauses; end
@@ -57,7 +58,7 @@ module Queries
         return unless can_auto_verify?
 
         query = self
-        filters = Search::Filter.new do
+        filters = Queries::Filter.new do
           bool do
             must do
               Clauses::Name::Last.exact(self, query.last_name, query.alt_last_name)
@@ -93,7 +94,7 @@ module Queries
       def top
         query = self
 
-        filters = Search::Filter.new do
+        filters = Queries::Filter.new do
           bool do
             must do
               # TODO enforce either last_name or one of email/phone
@@ -177,7 +178,7 @@ module Queries
         functions = function_scores
         size = @size
 
-        search do
+        Queries::Search.new do
           query do
             function_score do
               filter filters

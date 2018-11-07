@@ -1,5 +1,7 @@
+require 'elasticsearch-dsl'
+
 RSpec.describe Queries::VoterRecord::ScoreFunctions::Name do
-  let(:mocked_clause) { Search::Filter.new }
+  let(:mocked_clause) { Elasticsearch::DSL::Search::Filter.new }
 
   describe described_class::First do
     let(:first_name) { 'Testy' }
@@ -20,7 +22,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Name do
         subject
         expect(Queries::VoterRecord::Clauses::Name::First).to(
           have_received(:synonym).
-            with(an_instance_of(Search::Filter), first_name, alt_first_name),
+            with(an_instance_of(Elasticsearch::DSL::Search::Filter), first_name, alt_first_name),
         )
       end
 
@@ -41,7 +43,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Name do
         subject
         expect(Queries::VoterRecord::Clauses::Name::First).to(
           have_received(:exact).
-            with(an_instance_of(Search::Filter), first_name, alt_first_name),
+            with(an_instance_of(Elasticsearch::DSL::Search::Filter), first_name, alt_first_name),
         )
       end
 
@@ -79,7 +81,8 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Name do
       it 'calls the Middle::fuzzy clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Name::Middle).to(
-          have_received(:fuzzy).with(an_instance_of(Search::Filter), middle_name),
+          have_received(:fuzzy).
+            with(an_instance_of(Elasticsearch::DSL::Search::Filter), middle_name),
         )
       end
 

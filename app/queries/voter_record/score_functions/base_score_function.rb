@@ -1,6 +1,3 @@
-require 'elasticsearch/dsl'
-include Elasticsearch::DSL # rubocop:disable Style/MixinUsage
-
 module Queries
   module VoterRecord
     module ScoreFunctions
@@ -11,7 +8,7 @@ module Queries
         end
 
         def is_missing(factor, field)
-          filter = Search::Filter.new.missing field: field
+          filter = Queries::Filter.new.missing field: field
           boost_factor(factor, filter)
         end
       end

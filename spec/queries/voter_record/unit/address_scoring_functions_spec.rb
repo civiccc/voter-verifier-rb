@@ -1,5 +1,7 @@
+require 'elasticsearch-dsl'
+
 RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
-  let(:mocked_clause) { Search::Filter.new }
+  let(:mocked_clause) { Elasticsearch::DSL::Search::Filter.new }
 
   describe described_class::Full do
     let(:city) { 'Anytown' }
@@ -17,14 +19,14 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
       it 'calls the City::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::City).to(
-          have_received(:exact).with(instance_of(Search::Filters::And), city),
+          have_received(:exact).with(instance_of(Elasticsearch::DSL::Search::Filters::And), city),
         )
       end
 
       it 'calls the State::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::State).to(
-          have_received(:exact).with(instance_of(Search::Filters::And), state),
+          have_received(:exact).with(instance_of(Elasticsearch::DSL::Search::Filters::And), state),
         )
       end
 
@@ -60,21 +62,27 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
       it 'calls the City::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::City).to(
-          have_received(:exact).with(instance_of(Search::Filters::And), city).at_least(1),
+          have_received(:exact).
+            with(instance_of(Elasticsearch::DSL::Search::Filters::And), city).
+            at_least(1),
         )
       end
 
       it 'calls the State::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::State).to(
-          have_received(:exact).with(instance_of(Search::Filters::And), state).at_least(1),
+          have_received(:exact).
+            with(instance_of(Elasticsearch::DSL::Search::Filters::And), state).
+            at_least(1),
         )
       end
 
       it 'calls the StreetAddress::fuzzy clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::StreetAddress).to(
-          have_received(:fuzzy).with(instance_of(Search::Filters::And), street_address).at_least(1),
+          have_received(:fuzzy).
+            with(instance_of(Elasticsearch::DSL::Search::Filters::And), street_address).
+            at_least(1),
         )
       end
 
@@ -98,7 +106,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
       it 'calls the ZipCode::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::ZipCode).to(
-          have_received(:exact).with(instance_of(Search::Filter), zip_code),
+          have_received(:exact).with(instance_of(Elasticsearch::DSL::Search::Filter), zip_code),
         )
       end
 
@@ -124,7 +132,8 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
       it 'calls the LatLng::within clause' do
         subject
         expect(Queries::VoterRecord::Clauses::Address::LatLng).to(
-          have_received(:within).with(instance_of(Search::Filter), distance, lat, lng),
+          have_received(:within).
+            with(instance_of(Elasticsearch::DSL::Search::Filter), distance, lat, lng),
         )
       end
 

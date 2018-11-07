@@ -1,5 +1,7 @@
+require 'elasticsearch-dsl'
+
 RSpec.describe Queries::VoterRecord::ScoreFunctions::DOB do
-  let(:mocked_clause) { Search::Filter.new }
+  let(:mocked_clause) { Elasticsearch::DSL::Search::Filter.new }
 
   describe described_class::Day do
     let(:day) { 15 }
@@ -69,7 +71,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::DOB do
       it 'calls the Day::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::DOB::Day).to(
-          have_received(:exact).with(an_instance_of(Search::Filter), day),
+          have_received(:exact).with(an_instance_of(Elasticsearch::DSL::Search::Filter), day),
         )
       end
     end
@@ -105,7 +107,8 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::DOB do
       it 'calls the Day::missing_or_is_first clause' do
         subject
         expect(Queries::VoterRecord::Clauses::DOB::Day).to(
-          have_received(:missing_or_is_first).with(an_instance_of(Search::Filter)),
+          have_received(:missing_or_is_first).
+            with(an_instance_of(Elasticsearch::DSL::Search::Filter)),
         )
       end
     end
@@ -187,7 +190,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::DOB do
       it 'calls the Day::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::DOB::Month).to(
-          have_received(:exact).with(an_instance_of(Search::Filter), month),
+          have_received(:exact).with(an_instance_of(Elasticsearch::DSL::Search::Filter), month),
         )
       end
     end
@@ -222,7 +225,8 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::DOB do
       it 'calls the Day::missing_or_is_first clause' do
         subject
         expect(Queries::VoterRecord::Clauses::DOB::Month).to(
-          have_received(:missing_or_is_first).with(an_instance_of(Search::Filter)),
+          have_received(:missing_or_is_first).
+            with(an_instance_of(Elasticsearch::DSL::Search::Filter)),
         )
       end
     end
@@ -244,7 +248,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::DOB do
       it 'calls the Year::exact clause' do
         subject
         expect(Queries::VoterRecord::Clauses::DOB::Year).to(
-          have_received(:exact).with(an_instance_of(Search::Filter), year),
+          have_received(:exact).with(an_instance_of(Elasticsearch::DSL::Search::Filter), year),
         )
       end
 

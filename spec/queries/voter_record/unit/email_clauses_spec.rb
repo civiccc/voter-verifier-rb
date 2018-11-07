@@ -1,5 +1,7 @@
+require 'elasticsearch-dsl'
+
 RSpec.describe Queries::VoterRecord::Clauses::Email do
-  let(:parent_clause) { Search::Filter.new }
+  let(:parent_clause) { Elasticsearch::DSL::Search::Filter.new }
   let(:email) { 'testy.mctesterson@example.com' }
 
   describe '::exact' do
