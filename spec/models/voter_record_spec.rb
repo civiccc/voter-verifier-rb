@@ -49,8 +49,8 @@ RSpec.describe VoterRecord do
 
     let(:expected_location_attributes) do
       {
-        lat: '35.1868',
-        lng: '-106.6652',
+        lat: 35.1868,
+        lng: -106.6652,
       }
     end
 
@@ -180,7 +180,7 @@ RSpec.describe VoterRecord do
 
     it 'has the right score attributes' do
       expect(subject.scores).
-        to match expected_scores_attributes
+        to have_attributes(expected_scores_attributes)
     end
 
     context 'when registration_date is nil' do

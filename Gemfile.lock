@@ -16,7 +16,7 @@ GIT
 
 GIT
 ***REMOVED***
-  revision: ad643e061b49bce78f81e2c9203740fd4088ac7c
+  revision: 6c03662d96d79076acad8b3cb2ad83af1ed7fe11
   specs:
     thrift_shop (0.0.1)
       thrift

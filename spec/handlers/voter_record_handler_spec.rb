@@ -16,12 +16,12 @@ RSpec.describe VoterRecordHandler do
     let(:matching_voter_id) { 'CA-123456' }
     let(:multiple_matching_voter_ids) { [matching_voter_id, 'NY-987654'] }
     let(:non_matching_voter_id) { 'THISISNOTANID' }
-    let(:voter_records) { [multiple_matching_voter_ids].map { |id| build(:voter_record, id: id) } }
+    let(:voter_records) { multiple_matching_voter_ids.map { |id| build(:voter_record, id: id) } }
     let(:mock_model_get_result) { nil }
     let(:field_name) { :voter_records }
     let(:identifiers_field_name) { :voter_record_identifiers }
 
-    let(:id_to_search) { nil }
+    let(:id_to_search) { '' }
     let(:request) do
       ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new(
         voter_record_identifiers:
@@ -85,20 +85,11 @@ RSpec.describe VoterRecordHandler do
     it_behaves_like 'gets resource by identifiers'
 
     it { is_expected.to be_a ThriftShop::Verification::VoterRecords }
+
     it do
       is_expected.to have_attributes(
         voter_records: all(be_a(ThriftShop::Verification::VoterRecord)),
       )
-    end
-
-    context 'with an invalid identifier type' do
-      let(:request) do
-        ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new(
-          voter_record_identifiers:
-            ThriftShop::Verification::VoterRecordUniqueIdentifiers.new(foo: []),
-        )
-      end
-      it { expect { subject }.to raise_error(ThriftShop::Shared::ArgumentException) }
     end
   end
 end

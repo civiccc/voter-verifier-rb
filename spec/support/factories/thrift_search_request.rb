@@ -4,7 +4,9 @@ FactoryBot.define do
           class: ThriftShop::Verification::SearchRequest do
     max_results 3
 
-    after(:build) { |request| request.dob = request.dob.iso8601 }
+    dob '2014-08-01'
+    state ThriftShop::CivicData::StateCode::CA
+
     initialize_with { ThriftShop::Verification::SearchRequest.new attributes }
   end
 end
