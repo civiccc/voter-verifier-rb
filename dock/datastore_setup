@@ -5,3 +5,8 @@ set -euo pipefail
 source ./script/helpers.bash
 
 ELASTICSEARCH_HOST=docker-host wait-for-elasticsearch
+
+# ensure shard write consistency is set to 1 for development/testing purposes
+curl -XPUT 'http://docker-host:9200/_all/_settings?preserve_existing=true' -d '{
+   "index.write.wait.for.active.shards" : "1"
+ }'

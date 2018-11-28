@@ -72,13 +72,13 @@ services:
     extends:
       file: $BASE_COMPOSE
       service: elasticsearch_dev_base
-    command: ['elasticsearch', '--action.write_consistency=one']
+    command: ['elasticsearch']
 
   elasticsearch_test:
     extends:
       file: $BASE_COMPOSE
       service: elasticsearch_test_base
-    command: ['elasticsearch', '--action.write_consistency=one']
+    command: ['elasticsearch']
 
 # Define names of volumes that you want to be preserved between container restarts.
 # These are referenced above in the `volumes` section of the service.
