@@ -7,4 +7,4 @@
 # use the dock/initialize and dock/run files since those files run as the app
 # user and this file runs as root
 
-FROM brigade/ruby:2.5.1-latest
+FROM brigade/ruby:2.5.3-latest

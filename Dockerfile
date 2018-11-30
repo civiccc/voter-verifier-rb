@@ -1,4 +1,4 @@
-FROM brigade/ruby:2.5.1-latest
+FROM brigade/ruby:2.5.3-latest
 
 # Copy all source code into the container
 # See the .dockerignore file for a list of files that are excluded
