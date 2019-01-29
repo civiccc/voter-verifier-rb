@@ -4,16 +4,11 @@ class VoterRecordSearchHandler < ThriftServer::ThriftHandler
   include EnumConversion
   include Validation
 
-  process ThriftShop::Verification::VerificationService, only: %i[search]
+  process ThriftShop::Verification::VerificationService, only: %i[search contact_search]
 
   handle :search do |_headers, request|
     verify_field_presence(field: 'max_results', thrift_object: request)
-
-    if %i[last_name email phone].none? { |field| request.public_send(field) }
-      raise ThriftShop::Shared::ArgumentException,
-            message: 'Missing field: at least one of last_name, email or phone must be present',
-            code: ThriftShop::Shared::ArgumentExceptionCode::PRESENCE
-    end
+    verify_at_least_one_field_present(%i[last_name email phone], request)
 
     begin
       parsed_dob = Date.parse(request.dob)
@@ -46,5 +41,24 @@ class VoterRecordSearchHandler < ThriftServer::ThriftHandler
     ThriftShop::Verification::VoterRecords.new(
       voter_records: thrift_matches,
     )
+  end
+
+  handle :contact_search do |_headers, request|
+    verify_at_least_one_field_present(%i[email phone], request)
+
+    max_results = request.max_results || configatron.contact_search.max_results
+    phone = Queries::VoterRecord::Preprocessors::Phone.preprocess(request.phone)
+
+    matches = VoterVerification::ContactSearch.lookup(request.email, phone, max_results)
+    thrift_matches = matches.map(&:to_thrift)
+    ThriftShop::Verification::VoterRecords.new(voter_records: thrift_matches)
+  end
+
+  def verify_at_least_one_field_present(fields, request)
+    return unless fields.none? { |field| request.public_send(field) }
+
+    raise ThriftShop::Shared::ArgumentException,
+          message: "Missing field: at least one of #{fields} must be present",
+          code: ThriftShop::Shared::ArgumentExceptionCode::PRESENCE
   end
 end

@@ -38,3 +38,7 @@ configatron.elasticsearch do |es|
   es.voter_record_index = ENV['ELASTICSEARCH_INDEX'] || 'votizen_verifier'
   es.voter_record_doc_type = ENV['ELASTICSEARCH_DOC_TYPE'] || 'voters'
 end
+
+configatron.contact_search do |cs|
+  cs.max_results = 100
+end
