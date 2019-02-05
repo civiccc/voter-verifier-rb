@@ -193,9 +193,9 @@ module Queries
       end
 
       def can_auto_verify?
-        # last name not nil and dob/zip code not both nil and first_name/middle_name not both nil
+        # last name not nil and dob/(lat,lng) not both nil and first_name/middle_name not both nil
         !@last_name.nil? &&
-          !(@dob.nil? && @zip_code.nil?) &&
+          (!!@dob || (!!@lat && !!@lng)) &&
           !(@first_name.nil? && @middle_name.nil?)
       end
     end

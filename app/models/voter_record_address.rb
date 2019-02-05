@@ -29,6 +29,7 @@ class VoterRecordAddress < ElasticSearchDocument
   end
 
   def to_thrift
+    state_code = ts_address_field(:st)
     ThriftShop::Verification::Address.new(
       street: ts_address_field(:address),
       apt_number: ts_address_field(:address_apt_number),
@@ -36,7 +37,7 @@ class VoterRecordAddress < ElasticSearchDocument
       street_number: ts_address_field(:address_street_number),
       unit_designator: ts_address_field(:address_unit_designator),
       city: ts_address_field(:city),
-      state: state_code_to_thrift(state_code: ts_address_field(:st)),
+      state: !!state_code ? state_code_to_thrift(state_code: state_code) : nil,
       zip_code: ts_address_field(:zip_code),
     )
   end
