@@ -10,63 +10,60 @@ services:
   # referenced from another file on disk. Use these entries to define configurations
   # core to the particular service type and/or viewed as standards across our
   # infrastructure (e.g. image)
+  # TODO ask miller if any of this is relevant:
   # ref ***REMOVED******REMOVED*** for
   # more details and predefined *_base services defined by infrastructure
-  verification-service_base:
+  voter-verifier_base:
     build:
       context: .
       dockerfile: dock/bootstrap_Dockerfile
     environment:
       APP_UID:
       APP_GID:
-      CRYOGEN_KEY: ${CRYOGEN_KEY_VERIFICATION_SERVICE}
       ELASTICSEARCH_HOSTS: http://docker-host:9200/
       SERVICE_HOST: docker-host
-      # The async tier is more permissive
-      TIER: async
     # Add healthchecks with appropriate parameters to see if the service is actually listening on
-    # the port. These healthchecks are happening from within the internal container so (11xxx)
-    # i.e mapped ports should not be checked rather the actual service port needs to be checked
-    # Note: This interval and retries are set for smaller services that come up relatively faster.
+    # the port. Note: This interval and retries are set for smaller services that come up relatively fast.
     # For bigger services these may need to be tweaked.
-    # If its an http service you may use test as curl. e.g. curl localhost:3000
+    # If it's an http service you may use curl the test. e.g. curl localhost:3000
     # reference: https://docs.docker.com/compose/compose-file/compose-file-v2/#healthcheck
     healthcheck:
-      test: 'netstat -nlp | grep ***REMOVED***'
+      test: 'netstat -nlp | grep 9095'  # parametrize ports
       interval: 1s
       timeout: 10s
       retries: 120
     # Provide port mapping specification, as defined and leveraged by proximo
     # within staging and production environments, in order to avoid port conflicts
-    # across services. Contact Ops for port assignment and
+    # across services.
+    # TODO ask miller if these are relevant
     # ref: ***REMOVED******REMOVED***)
     # for examples.
     # e.g.:
     ports:
-      - '***REMOVED***:***REMOVED***'
-      - '***REMOVED***:***REMOVED***'
+      - '9095:9095'
+      - '3000:3000'
     volumes:
       - '.:/src'
     working_dir: '/src'
     command: ['bash', '-c', 'dock/initialize && dock/datastore_setup && dock/run']
 
-  verification-service:
-    extends: verification-service_base
+  voter-verifier:
+    extends: voter-verifier_base
     depends_on:
       # We just need to check if the service is healthy. The actual port test is done in
       # base-compose.yml for all the datastores.
       elasticsearch:
         condition: service_healthy
     environment:
-      BRIGADE_ENV: development
+      VOTER_VERIFIER_ENV: development
 
-  verification-service_test:
-    extends: verification-service_base
+  voter-verifier_test:
+    extends: voter-verifier_base
     depends_on:
       elasticsearch_test:
         condition: service_healthy
     environment:
-      BRIGADE_ENV: test
+      VOTER_VERIFIER_ENV: test
 
   elasticsearch:
     extends:

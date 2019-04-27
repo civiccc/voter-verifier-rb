@@ -4,9 +4,9 @@
 # The project is used to define a canonical name for persistent storage
 # volumes. This allows different executors for the same build project (which
 # have different repos and container names) to point to the same volumes so gems
-# can be reused (e.g. foghorn-rspec, foghorn-rspec@2, and foghorn-overcommit all
-# have the same project name "foghorn").
-project=verification-service
+# can be reused (e.g. voter-verifier-json and voter-verifier-thrift both have
+# the same project name "voter-verifier").
+project=voter-verifier
 
 dockerfile dock/development_Dockerfile
 build_context dock # Directory to use as build context (relative to repo root)
@@ -22,56 +22,35 @@ env_var CI "${CI:-0}"
 env_var APP_UID $(user_id)
 env_var APP_GID $(group_id)
 
-# Needed in order to upload build artifacts to Nexus
-env_var NEXUS_GROUP $project
-optional_env_var NEXUS_USER
-optional_env_var NEXUS_PASSWORD
-
-# Allow user to specify a Docker image tag to deploy via jenkins/deploy script
-optional_env_var DEPLOY_TAG
-
-# These variables are used in some Jenkins jobs, but we need to explicitly allow
-# them to be passed through from the Jenkins worker to the container.
-optional_env_var CRYOGEN_KEY
-
-# Allow our local SSH agent to be used within the container
-# and ensure proper configuration for Jenkins deployments and
-# developer cluster console support
+# Allow our local SSH agent to be used within the container and ensure proper configuration for builds
 if [ -n "${SSH_AUTH_SOCK+x}" ]; then
   volume "${SSH_AUTH_SOCK}:/tmp/ssh-auth-sock"
   env_var SSH_AUTH_SOCK /tmp/ssh-auth-sock
 fi
 
-# Mount user SSH configuration for deployments and Chronos job execution
+# Mount user SSH configuration for deployments
 volume "$HOME/.ssh:/home/app/.ssh"
 volume "/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
-
-# Capture the user deloying (used by script/jenkins-deploy)
-if [ -z "${DEPLOYER+x}" ]; then
-  if [ -n "${USER+x}" ]; then
-    env_var DEPLOYER "$USER"
-  fi
-else
-  env_var DEPLOYER "$DEPLOYER"
-fi
 
 # Expose Docker Hub credentials if they exist
 if [ -d "$HOME/.docker" ]; then
   volume "$HOME/.docker:/home/app/.docker"
 fi
 
-# Expose project network configurations (e.g. ports and interfaces) to host in development environment only (otherwise we may have
-# conflicts if two tests run at the same time on a single Jenkins worker)
+# Expose project network configurations (e.g. ports and interfaces) to host in
+# development environment only (otherwise we may have conflicts if two tests run
+# at the same time on a single build worker)
 if ! ci; then
   # Define services to launch when the project is composed in an extended Dock, multi-project environment.
   # Services should be defined within a docker-compose.yml file associated with the project
-  startup_services "verification-service"
+  startup_services "voter-verifier"
 
   if osx; then
     # add to isolated network and publish ports of interest to host to workaround
     # https://forums.docker.com/t/should-docker-run-net-host-work/14215
-    publish "***REMOVED***:***REMOVED***" # thrift-rpc
-    publish "***REMOVED***:***REMOVED***" # async
+    # TODO parametrize
+    publish "9095:9095" # thrift-rpc
+    publish "3000:3000" # rails-api
   else
     # share host network interface
     run_flags --network host
@@ -80,15 +59,15 @@ if ! ci; then
   # Store files that we like to reuse between runs (e.g. gems)
   volume "${project}_cache:/home/app/.cache"
 
-  # Persist Dock modifications to /var/lib/docker in order to create a local cache for
-  # Docker objects (e.g. images) when rebuilding Dock container
+  # Persist Dock modifications to /var/lib/docker in order to create a local
+  # cache for Docker objects (e.g. images) when rebuilding Dock container
   volume "${container_name}_docker:/var/lib/docker:rw"
 else
   # Add to isolated network
   run_flags --network bridge
 
   # Utilize test variants of services when in CI mode
-  startup_services "verification-service_test"
+  startup_services "voter-verifier_test"
 
   # Do not provide a 'named' volume to prevent persisting files (e.g. gems) between runs
   volume "/home/app/.cache"

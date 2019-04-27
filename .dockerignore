@@ -1,5 +1,4 @@
 # Exclude files matching any of the patterns below.
 # Whitelist files/patterns for inclusion by prepending "!" to them.
-.arcanus/unprotected.key
 .git
-jenkins
+# TODO what else?

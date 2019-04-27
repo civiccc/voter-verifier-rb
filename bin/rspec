@@ -1,0 +1,21 @@
+#!/usr/local/bin/dock bash
+
+# Helper script which prepares the test environment and executes RSpec tests.
+
+source $(dirname $0)/helpers.bash
+
+install-gems
+
+section "Starting up services..."
+trap "docker-compose stop" EXIT INT QUIT TERM
+services="elasticsearch_test"
+docker-compose up -d $services
+wait-for-elasticsearch
+
+# Run specs matching pattern specified by arguments
+VOTER_VERIFIER_ENV=test bundle exec rspec
+
+e=$?
+
+# exit with the original spec exit code
+exit $e

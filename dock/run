@@ -6,4 +6,4 @@ if [ -n "${CRYOGEN_KEY}" ]; then
   . /dev/stdin <<< "$(cryogen export)"
 fi
 
-cd /src && bundle exec rake verification_service:run
+cd /src && bundle exec rake thrift_server:run

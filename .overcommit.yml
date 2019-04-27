@@ -1,16 +1,8 @@
 CommitMsg:
-  GerritChangeId:
-    enabled: true
-
   HardTabs:
     enabled: true
 
 PreCommit:
-  AuthorEmail:
-    enabled: true
-    description: 'Checking author email for Brigade domain'
-***REMOVED***
-
   BundleCheck:
     enabled: true
 
@@ -19,13 +11,8 @@ PreCommit:
     exclude:
       - 'bin/**/*'
       - 'dock/**/*'
-      - 'jenkins/**/*'
-      - 'script/**/*'
 
   MergeConflicts:
-    enabled: true
-
-  ScriptDirModifications:
     enabled: true
 
   PryBinding:
@@ -40,5 +27,4 @@ PreCommit:
   TrailingWhitespace:
     enabled: true
 
-# This repository is private, so we don't need this additional security
-verify_signatures: false
+verify_signatures: true

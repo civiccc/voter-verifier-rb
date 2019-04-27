@@ -4,7 +4,7 @@ FactoryBot.define do
     middle_name 'Quincy'
     last_name 'McTesterson'
     dob Date.new(2014, 8, 1)
-    email 'testy.mctesterson@gmail.com'
+    email 'testy.mctesterson@example.com'
     phone '123-456-7890'
     street_address '***REMOVED***'
     city 'San Francisco'
