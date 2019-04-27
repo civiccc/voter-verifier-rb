@@ -3,4 +3,4 @@
 # This image should install debug tools and other software useful for the
 # development and testing of this repository.
 
-FROM brigade/dock:ruby-2.5.3-latest
+FROM ruby:2.5.3
