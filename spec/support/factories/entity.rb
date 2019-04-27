@@ -5,7 +5,6 @@ FactoryBot.define do
     uuid { SecureRandom.uuid }
     role { ThriftShop::Shared::EntityRole::USER }
 
-    trait(:admin) { role { ThriftShop::Shared::EntityRole::ADMIN } }
     trait(:user) { role { ThriftShop::Shared::EntityRole::USER } }
     trait(:guest) { role { ThriftShop::Shared::EntityRole::GUEST } }
   end

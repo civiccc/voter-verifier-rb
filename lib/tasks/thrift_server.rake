@@ -1,6 +1,6 @@
 require_relative '../../app/verification_server'
 
-namespace :verification_service do
+namespace :thrift_server do
   EXIT_SIGNALS = %w[QUIT INT TERM].freeze # should SIGINT clean-kill?
 
   def run_gracefully(daemon)

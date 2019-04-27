@@ -1,3 +1,4 @@
+# TODO switch command-line args despite rake's weirdness with those
 namespace :search do
   desc 'Run everything but the thrift for a voter record search. Accepted env args:
     last_name

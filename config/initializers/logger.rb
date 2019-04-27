@@ -3,5 +3,3 @@ LOGGER = ThriftServer::Logger.new(configatron.logger.file,
                                   json: configatron.logger.json.enabled == true,
                                   pretty_print: configatron.logger.json.pretty_print == true)
 LOGGER.level = configatron.logger.level
-
-ServiceUtilities.logger = LOGGER

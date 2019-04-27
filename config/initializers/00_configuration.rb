@@ -4,7 +4,7 @@ begin
   # Load settings from .env
   env_files = [
     '.env.local',
-    ".env.#{ENV['BRIGADE_ENV']}",
+    ".env.#{ENV['VOTER_VERIFIER_ENV']}",
     '.env',
   ]
 
@@ -18,7 +18,7 @@ require 'configatron'
 
 config_files = [
   'configatron/defaults',
-  "configatron/#{ENV['BRIGADE_ENV']}",
+  "configatron/#{ENV['VOTER_VERIFIER_ENV']}",
   'configatron/local',
 ]
 

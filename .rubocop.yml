@@ -158,7 +158,7 @@ PredicateName:
 Rails/HasAndBelongsToMany:
   Enabled: false
 
-# This doesn't allow inheritance or multi-level YAML configs, which we use a lot.
+# This doesn't allow inheritance or multi-level YAML configs
 Security/YAMLLoad:
   Enabled: false
 

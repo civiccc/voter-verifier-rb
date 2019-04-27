@@ -5,16 +5,15 @@ module Queries
     module Clauses
       module Name
         # Constant names of available ElasticSearch field analyzers
-        # These analyzers are defined in Pluribus, in the job that ingests the TargetSmart data and
-        # builds the ElasticSearch indices. See:
-        # ***REMOVED***
+        # See: # TODO link to analyzer definitions
         module Analyzers
           # Applies a lowercase filter and an alphanumeric filter to normalize
           # - e.g. hyphenated names (Newton-John => newtonjohn)
           # - e.g. spaces in names (Mac Donald -> macdonald)
           COMPACT = 'name_compact_analyzer'.freeze
           # Applies a custom filter to add tokens for common first name synonyms
-          # - e.g. "Bob" for "Robert". The synonyms are maintained in code in Pluribus.
+          # - e.g. "Bob" for "Robert". The synonyms are maintained in code in
+          # TODO location of the first name synonyms
           FIRST = 'first_name_analyzer'.freeze
         end
 

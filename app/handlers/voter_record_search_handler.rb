@@ -32,7 +32,7 @@ class VoterRecordSearchHandler < ThriftServer::ThriftHandler
         state: thrift_to_state_code(enum: request.state),
         zip_code: request.zip_code,
       },
-      max_results: request.max_results,
+      max_results: request.max_results || configatron.search.default_max_results,
       smart_search: true,
     ).run
 
@@ -46,7 +46,7 @@ class VoterRecordSearchHandler < ThriftServer::ThriftHandler
   handle :contact_search do |_headers, request|
     verify_at_least_one_field_present(%i[email phone], request)
 
-    max_results = request.max_results || configatron.contact_search.max_results
+    max_results = request.max_results || configatron.search.contact.default_max_results
     phone = Queries::VoterRecord::Preprocessors::Phone.preprocess(request.phone)
 
     matches = VoterVerification::ContactSearch.lookup(request.email, phone, max_results)

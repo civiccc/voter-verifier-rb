@@ -7,11 +7,11 @@ def require_dir(path_from_root)
 end
 
 # Determine the code environment
-ENV['BRIGADE_ENV'] ||=
+ENV['VOTER_VERIFIER_ENV'] ||=
   ENV['RAILS_ENV'] || ENV['RACK_ENV'] || 'development'
 
 # Load up gems automatically
-Bundler.require(:default, ENV['BRIGADE_ENV'].to_sym)
+Bundler.require(:default, ENV['VOTER_VERIFIER_ENV'].to_sym)
 
 # Load all files in order
 require_dir 'lib'.freeze

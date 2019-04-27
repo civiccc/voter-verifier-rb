@@ -5,6 +5,7 @@ FactoryBot.define do
     max_results 3
 
     dob '2014-08-01'
+    # TODO CivicData won't be the namespace for this anymore
     state ThriftShop::CivicData::StateCode::CA
 
     initialize_with { ThriftShop::Verification::SearchRequest.new attributes }

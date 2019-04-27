@@ -1,4 +1,4 @@
-ENV['BRIGADE_ENV'] ||= 'test' # in case we didn't set it explicitly
+ENV['VOTER_VERIFIER_ENV'] ||= 'test' # in case we didn't set it explicitly
 
 # initialise all code
 require File.expand_path('../config/init', __dir__)
