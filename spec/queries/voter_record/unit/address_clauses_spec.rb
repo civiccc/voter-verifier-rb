@@ -75,7 +75,7 @@ RSpec.describe Queries::VoterRecord::Clauses::Address do
   end
 
   describe described_class::StreetAddress do
-    let(:street_address) { '***REMOVED***' }
+    let(:street_address) { '000 Main St' }
 
     describe '::fuzzy' do
       subject(:fuzzy) { described_class.fuzzy(parent_clause, street_address).to_hash }

@@ -4,7 +4,7 @@ FactoryBot.define do
     address '000 Third ST'
     address_apt_number nil
     address_street_name 'THIRD'
-    address_street_number '524'
+    address_street_number '000'
     address_unit_designator nil
     campaign_finance_score '71.5'
     catholic_score '16.5'
@@ -86,7 +86,7 @@ FactoryBot.define do
     ts_address '000 Third STREET'
     ts_address_apt_number '1'
     ts_address_street_name 'THIRD'
-    ts_address_street_number '524'
+    ts_address_street_number '000'
     ts_address_unit_designator 'SUITE'
     ts_city 'SAN FRANCISCO'
     ts_exact_track 'Y12345678901234'
