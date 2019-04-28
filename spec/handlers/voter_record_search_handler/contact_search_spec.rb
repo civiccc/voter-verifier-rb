@@ -11,9 +11,11 @@ RSpec.describe VoterRecordSearchHandler do
   end
 
   let(:request) do
-    ThriftDefs::RequestTypes::ContactSearch.new(email: email,
-                                                       phone: raw_phone,
-                                                       max_results: max_results)
+    ThriftDefs::RequestTypes::ContactSearch.new(
+      email: email,
+      phone: raw_phone,
+      max_results: max_results,
+    )
   end
 
   let(:email) { nil }
@@ -32,13 +34,6 @@ RSpec.describe VoterRecordSearchHandler do
   describe '#contact_search' do
     subject(:results) { handler.contact_search(headers, request).voter_records }
 
-    before do
-      allow(VoterVerification::ContactSearch).
-        to receive(:email_search).with(email, max_results).and_return(email_matches)
-      allow(VoterVerification::ContactSearch).
-        to receive(:phone_search).with(phone, max_results).and_return(phone_matches)
-    end
-
     context 'invalid request' do
       it 'throws an exception' do
         expect { subject }.to raise_error(ThriftDefs::ExceptionTypes::ArgumentException)
@@ -48,6 +43,8 @@ RSpec.describe VoterRecordSearchHandler do
     context 'only email requested' do
       let(:email) { 'dt@llareggub.wales' }
 
+      before { allow(VoterRecord).to receive(:search).and_return(email_matches) }
+
       it 'returns the email matches' do
         expect(results.map(&:id).sort).to eq email_matches.map(&:id).sort
       end
@@ -55,6 +52,7 @@ RSpec.describe VoterRecordSearchHandler do
 
     context 'only phone requested' do
       let(:raw_phone) { '0123456789' }
+      before { allow(VoterRecord).to receive(:search).and_return(phone_matches) }
 
       it 'returns the phone matches' do
         expect(results.map(&:id).sort).to eq phone_matches.map(&:id).sort
@@ -64,6 +62,7 @@ RSpec.describe VoterRecordSearchHandler do
     context 'only phone with prefix requested' do
       let(:raw_phone) { '+10123456789' }
       let(:phone) { '0123456789' }
+      before { allow(VoterRecord).to receive(:search).and_return(phone_matches) }
 
       it 'returns the phone matches' do
         expect(results.map(&:id).sort).to eq phone_matches.map(&:id).sort
@@ -73,6 +72,7 @@ RSpec.describe VoterRecordSearchHandler do
     context 'both email and phone requested' do
       let(:email) { 'dt@llareggub.wales' }
       let(:raw_phone) { '0123456789' }
+      before { allow(VoterRecord).to receive(:search).and_return(email_matches & phone_matches) }
 
       it 'returns the intersection' do
         expect(results.map(&:id).sort).to eq ['id1', 'id3']

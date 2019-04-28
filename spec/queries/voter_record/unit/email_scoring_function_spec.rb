@@ -1,7 +1,7 @@
 require 'elasticsearch-dsl'
 
 RSpec.describe Queries::VoterRecord::ScoreFunctions::Email do
-  let(:mocked_clause) { Elasticsearch::DSL::Search::Filter.new }
+  let(:mocked_clause) { Elasticsearch::DSL::Search::Query.new }
 
   describe '::exact' do
     subject(:exact) { described_class.exact(email) }
@@ -13,7 +13,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Email do
     it 'calls the Email::exact clause' do
       subject
       expect(Queries::VoterRecord::Clauses::Email).to(
-        have_received(:exact).with(instance_of(Elasticsearch::DSL::Search::Filter), email),
+        have_received(:exact).with(instance_of(Elasticsearch::DSL::Search::Query), email),
       )
     end
 

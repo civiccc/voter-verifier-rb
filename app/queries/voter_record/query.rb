@@ -40,10 +40,10 @@ module Queries
         @size = size
 
         @first_name, @middle_name, @last_name = preprocessed_name.values_at(
-        :first, :middle, :last
+          :first, :middle, :last
         )
         @alt_first_name, @alt_middle_name, @alt_last_name = preprocessed_alt_name.values_at(
-        :first, :middle, :last
+          :first, :middle, :last
         )
 
         @street_address, @city, @state, @zip_code, @lat, @lng = preprocessed_address.
@@ -88,7 +88,7 @@ module Queries
 
         min_score = dob.nil? ? MIN_SCORE_AUTO_NO_DOB : MIN_SCORE_AUTO_WITH_DOB
 
-        build(filters, min_score)
+        build_with_function_score(filters, min_score: min_score)
       end
 
       def top
@@ -102,7 +102,7 @@ module Queries
                 Clauses::Name::Last.exact(self, query.last_name, query.alt_last_name)
               else
                 bool do
-                  should { Clauses::Email.exact(self, query.email) } unless query.email.nil?
+                  should { query { Clauses::Email.exact(self, query.email) } } unless query.email.nil?
                   should { Clauses::Phone.exact(self, query.phone) } unless query.phone.nil?
                 end
               end
@@ -129,7 +129,30 @@ module Queries
           end
         end
 
-        build(filters, MIN_SCORE_TOP)
+        build_with_function_score(filters, min_score: MIN_SCORE_TOP)
+      end
+
+      # Build Elasticsearch voter records query by email or phone or both
+      # If both phone and email are specified, the intersection is taken.
+      def contact
+        query = self
+        # only one:
+        if email.blank? || phone.blank?
+          # if phone, do a constant_score on the match clause
+          if email.blank?
+            filters = [Clauses::Phone.exact(Queries::Filter.new, query.phone)]
+            build_with_constant_score(filters)
+          # if email, just do the match clause
+          else
+            Queries::Search.new { query Clauses::Email.exact(Queries::Query.new, query.email) }
+          end
+        # both?
+        else
+          # use phone number as a filter
+          filters = [Clauses::Phone.exact(Queries::Filter.new, phone)]
+          # use email as the filter function, build with function_score
+          build_with_function_score(filters)
+        end
       end
 
       private
@@ -174,7 +197,19 @@ module Queries
         functions.flatten
       end
 
-      def build(filters, min_score)
+      def build_with_constant_score(filters)
+        size = @size
+        Queries::Search.new do
+          query do
+            constant_score do
+              filter filters
+            end
+          end
+          size size
+        end
+      end
+
+      def build_with_function_score(filters, min_score: nil)
         functions = function_scores
         size = @size
 
@@ -187,7 +222,7 @@ module Queries
             end
           end
 
-          min_score min_score
+          min_score min_score unless min_score.nil?
           size size
         end
       end

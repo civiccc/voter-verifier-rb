@@ -38,21 +38,21 @@ class VoterRecordSearchHandler < ThriftServer::ThriftHandler
 
     thrift_matches = matches.map(&:to_thrift).each { |record| record.auto_verify = auto_verify }
 
-    ThriftDefs::VoterRecordTypes::VoterRecords.new(
-      voter_records: thrift_matches,
-    )
+    ThriftDefs::VoterRecordTypes::VoterRecords.new(voter_records: thrift_matches)
   end
 
   handle :contact_search do |_headers, request|
     verify_at_least_one_field_present(%i[email phone], request)
 
-    max_results = request.max_results || configatron.search.contact.default_max_results
-    phone = Queries::VoterRecord::Preprocessors::Phone.preprocess(request.phone)
+    matches = VoterVerification::ContactSearch.new(
+      query_args: {
+        email: request.email,
+        phone: request.phone,
+      },
+      max_results: request.max_results || configatron.search.contact.default_max_results
+    ).run
 
-    matches = VoterVerification::ContactSearch.lookup(request.email, phone, max_results)
     thrift_matches = matches.map(&:to_thrift)
     ThriftDefs::VoterRecordTypes::VoterRecords.new(voter_records: thrift_matches)
   end
-
-
 end
