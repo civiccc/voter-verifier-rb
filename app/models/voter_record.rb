@@ -1,6 +1,4 @@
-require 'service_utilities'
-
-# PORO wrapping elasticsearch results
+# Wraps elasticsearch results
 class VoterRecord < ElasticSearchDocument
   attributes %i[
     activist_score
@@ -92,7 +90,6 @@ class VoterRecord < ElasticSearchDocument
     ts_address_street_number
     ts_address_unit_designator
     ts_city
-    ts_exact_track
     ts_lat_lng_location
     ts_st
     ts_wireless_phone
@@ -112,10 +109,10 @@ class VoterRecord < ElasticSearchDocument
     zip_code
   ]
 
-  POLITICAL_PARTY_TO_THRIFT = ThriftShop::Verification::PoliticalParty::VALUE_MAP.invert.
+  POLITICAL_PARTY_TO_THRIFT = ThriftDefs::VoterRecordTypes::PoliticalParty::VALUE_MAP.invert.
     transform_keys(&:titleize).freeze
 
-  EMAIL_APPEND_LEVEL_TO_THRIFT = ThriftShop::Verification::EmailMatchType::VALUE_MAP.invert.
+  EMAIL_APPEND_LEVEL_TO_THRIFT = ThriftDefs::VoterRecordTypes::EmailMatchType::VALUE_MAP.invert.
     transform_keys(&:titleize).freeze
 
   VOTER_SCORE_THRIFT_KEY_TO_TS = {
@@ -126,26 +123,26 @@ class VoterRecord < ElasticSearchDocument
     'UNREGISTERED' => 'Unregistered',
   }.transform_values(&:freeze).freeze
 
-  VOTER_SCORE_TO_THRIFT = ThriftShop::Verification::VoterScore::VALUE_MAP.invert.
+  VOTER_SCORE_TO_THRIFT = ThriftDefs::VoterRecordTypes::VoterScore::VALUE_MAP.invert.
     transform_keys { |key| VOTER_SCORE_THRIFT_KEY_TO_TS[key] }.freeze
 
   VOTE_TYPE_TO_THRIFT = {
-    'A' => ThriftShop::Verification::VoteType::ABSENTEE,
-    'B' => ThriftShop::Verification::VoteType::ABSENTEE,
-    'E' => ThriftShop::Verification::VoteType::EARLY,
-    'F' => ThriftShop::Verification::VoteType::EARLY,
-    'I' => ThriftShop::Verification::VoteType::INELIGIBLE,
-    'M' => ThriftShop::Verification::VoteType::MAIL,
-    'N' => ThriftShop::Verification::VoteType::NO_RECORD,
-    'P' => ThriftShop::Verification::VoteType::AT_POLL,
-    'Q' => ThriftShop::Verification::VoteType::PROVISIONAL,
-    'R' => ThriftShop::Verification::VoteType::AT_POLL,
-    'S' => ThriftShop::Verification::VoteType::PROVISIONAL,
-    'Y' => ThriftShop::Verification::VoteType::VOTED,
-    'Z' => ThriftShop::Verification::VoteType::VOTED,
+    'A' => ThriftDefs::VoterRecordTypes::VoteType::ABSENTEE,
+    'B' => ThriftDefs::VoterRecordTypes::VoteType::ABSENTEE,
+    'E' => ThriftDefs::VoterRecordTypes::VoteType::EARLY,
+    'F' => ThriftDefs::VoterRecordTypes::VoteType::EARLY,
+    'I' => ThriftDefs::VoterRecordTypes::VoteType::INELIGIBLE,
+    'M' => ThriftDefs::VoterRecordTypes::VoteType::MAIL,
+    'N' => ThriftDefs::VoterRecordTypes::VoteType::NO_RECORD,
+    'P' => ThriftDefs::VoterRecordTypes::VoteType::AT_POLL,
+    'Q' => ThriftDefs::VoterRecordTypes::VoteType::PROVISIONAL,
+    'R' => ThriftDefs::VoterRecordTypes::VoteType::AT_POLL,
+    'S' => ThriftDefs::VoterRecordTypes::VoteType::PROVISIONAL,
+    'Y' => ThriftDefs::VoterRecordTypes::VoteType::VOTED,
+    'Z' => ThriftDefs::VoterRecordTypes::VoteType::VOTED,
   }.freeze
 
-  PHONE_TYPE_TYPE_TO_THRIFT = ThriftShop::Verification::PhoneType::VALUE_MAP.invert.freeze
+  PHONE_TYPE_TYPE_TO_THRIFT = ThriftDefs::VoterRecordTypes::PhoneType::VALUE_MAP.invert.freeze
 
   RACE_SCORES = Set.new(
     %w[
@@ -165,9 +162,8 @@ class VoterRecord < ElasticSearchDocument
       parsed_registration_date = nil
     end
 
-    ThriftShop::Verification::VoterRecord.new(
+    ThriftDefs::VoterRecordTypes::VoterRecord.new(
       id: id,
-      exact_track: ts_exact_track,
       first_name: first_name,
       middle_name: middle_name,
       last_name: last_name,
@@ -212,14 +208,14 @@ class VoterRecord < ElasticSearchDocument
       (RACE_SCORES.include?(key) ? value.to_f * 100 : value.to_f).round(1)
     end
 
-    ThriftShop::Verification::Scores.new(**score_attrs.except('voter').symbolize_keys)
+    ThriftDefs::VoterRecordTypes::Scores.new(**score_attrs.except('voter').symbolize_keys)
   end
 
   def thrift_location
     return if lat_lng_location.nil?
 
     lat, lng = lat_lng_location.split(',')
-    ThriftShop::Verification::GeoCoordinate.new(lat: lat.to_f, lng: lng.to_f)
+    ThriftDefs::GeoTypes::Coordinate.new(lat: lat.to_f, lng: lng.to_f)
   end
 
   def thrift_general_elections

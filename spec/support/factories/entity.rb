@@ -1,11 +1,11 @@
-require 'thrift_shop'
+require 'thrift_defs'
 
 FactoryBot.define do
-  factory :entity, class: ThriftShop::Shared::Entity do
+  factory :entity, class: ThriftDefs::AuthTypes::Entity do
     uuid { SecureRandom.uuid }
-    role { ThriftShop::Shared::EntityRole::USER }
+    role { ThriftDefs::AuthTypes::EntityRole::USER }
 
-    trait(:user) { role { ThriftShop::Shared::EntityRole::USER } }
-    trait(:guest) { role { ThriftShop::Shared::EntityRole::GUEST } }
+    trait(:user) { role { ThriftDefs::AuthTypes::EntityRole::USER } }
+    trait(:guest) { role { ThriftDefs::AuthTypes::EntityRole::GUEST } }
   end
 end

@@ -1,3 +1,5 @@
+require 'csv'
+
 # Use a CSV file as a data source to build an in-memory map of zip codes -> lat/lng
 class InMemoryGeocoder
   # @param csv_src [String] File-path of the CSV source data

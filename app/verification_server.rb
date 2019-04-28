@@ -10,7 +10,7 @@ class VerificationServer
 
   def initialize
     @server = ThriftServer.threaded(
-      ThriftShop::Verification::VerificationService,
+      ThriftDefs::VoterVerifier::Service,
       HANDLERS,
       port: configatron.server.port,
     )

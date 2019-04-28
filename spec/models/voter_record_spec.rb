@@ -42,7 +42,7 @@ RSpec.describe VoterRecord do
         street_number: '000',
         unit_designator: 'SUITE',
         city: 'SAN FRANCISCO',
-        state: ThriftShop::CivicData::StateCode::CA,
+        state: ThriftDefs::GeoTypes::StateCode::CA,
         zip_code: '94105',
       }
     end
@@ -64,16 +64,16 @@ RSpec.describe VoterRecord do
 
     let(:expected_general_vote_types_attributes) do
       {
-        '2012' => ThriftShop::Verification::VoteType::EARLY,
-        '2014' => ThriftShop::Verification::VoteType::VOTED,
-        '2016' => ThriftShop::Verification::VoteType::ABSENTEE,
+        '2012' => ThriftDefs::VoterRecordTypes::VoteType::EARLY,
+        '2014' => ThriftDefs::VoterRecordTypes::VoteType::VOTED,
+        '2016' => ThriftDefs::VoterRecordTypes::VoteType::ABSENTEE,
       }
     end
 
     let(:expected_primary_vote_types_attributes) do
       {
-        '2014' => ThriftShop::Verification::VoteType::NO_RECORD,
-        '2016' => ThriftShop::Verification::VoteType::INELIGIBLE,
+        '2014' => ThriftDefs::VoterRecordTypes::VoteType::NO_RECORD,
+        '2016' => ThriftDefs::VoterRecordTypes::VoteType::INELIGIBLE,
       }
     end
 
@@ -129,21 +129,20 @@ RSpec.describe VoterRecord do
     let(:expected_attributes) do
       {
         id: 'CA-1234567',
-        exact_track: 'Y12345678901234',
         first_name: 'TESTY',
         middle_name: 'QUINCY',
         last_name: 'MCTESTERSON',
         dob: '2014-08-01',
-        party: ThriftShop::Verification::PoliticalParty::DEMOCRAT,
+        party: ThriftDefs::VoterRecordTypes::PoliticalParty::DEMOCRAT,
         registration_date: '2012-08-17',
         email: 'testy.mctesterson@example.com',
-        email_append_level: ThriftShop::Verification::EmailMatchType::INDIVIDUAL,
-        voter_score: ThriftShop::Verification::VoterScore::FREQUENT,
+        email_append_level: ThriftDefs::VoterRecordTypes::EmailMatchType::INDIVIDUAL,
+        voter_score: ThriftDefs::VoterRecordTypes::VoterScore::FREQUENT,
         num_general_election_votes: 3,
         num_primary_election_votes: 2,
         phone: '1234567890',
         vb_phone: '1234567891',
-        vb_phone_type: ThriftShop::Verification::PhoneType::WIRELESS,
+        vb_phone_type: ThriftDefs::VoterRecordTypes::PhoneType::WIRELESS,
         ts_wireless_phone: '1234567892',
         vb_phone_wireless: '1234567893',
       }
@@ -151,7 +150,7 @@ RSpec.describe VoterRecord do
 
     subject { voter_record.to_thrift }
 
-    it { is_expected.to be_a(ThriftShop::Verification::VoterRecord) }
+    it { is_expected.to be_a(ThriftDefs::VoterRecordTypes::VoterRecord) }
 
     it { is_expected.to have_attributes(expected_attributes) }
 
@@ -186,7 +185,7 @@ RSpec.describe VoterRecord do
     context 'when registration_date is nil' do
       let(:voter_record) { build(:voter_record, registration_date: nil) }
 
-      it { is_expected.to be_an_instance_of(ThriftShop::Verification::VoterRecord) }
+      it { is_expected.to be_an_instance_of(ThriftDefs::VoterRecordTypes::VoterRecord) }
       it { is_expected.to have_attributes(registration_date: nil) }
     end
   end

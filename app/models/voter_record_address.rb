@@ -1,8 +1,6 @@
-require 'service_utilities'
-
 # Represents a voter address in the votizen_verifiers index, a subset of fields of the voters document
 class VoterRecordAddress < ElasticSearchDocument
-  include EnumConversion
+  include ThriftUtils::EnumConversion
 
   attributes %i[
     address
@@ -30,7 +28,7 @@ class VoterRecordAddress < ElasticSearchDocument
 
   def to_thrift
     state_code = ts_address_field(:st)
-    ThriftShop::Verification::Address.new(
+    ThriftDefs::GeoTypes::Address.new(
       street: ts_address_field(:address),
       apt_number: ts_address_field(:address_apt_number),
       street_name: ts_address_field(:address_street_name),

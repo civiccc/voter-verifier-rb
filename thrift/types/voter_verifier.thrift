@@ -5,8 +5,6 @@ include "./geo_types.thrift"
 include "./request_types.thrift"
 include "./voter_record_types.thrift"
 
-typedef geo_types.Addresses RandomAddresses
-
 service Service {
   voter_record_types.VoterRecords get_voter_records_by_identifiers(
     1: request_types.Headers headers,
@@ -33,7 +31,7 @@ service Service {
     2: exception_types.UnauthorizedException unauthorized_exception,
   ) ( description = "More permissive search" )
 
-  RandomAddresses get_random_addresses(
+  geo_types.Addresses get_random_addresses(
     1: request_types.Headers headers,
     2: request_types.RandomAddress request,
   ) throws (

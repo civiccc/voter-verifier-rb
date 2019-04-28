@@ -193,12 +193,13 @@ module ThriftDefs
       NUM_PRIMARY_ELECTION_VOTES = 16
       PRIMARY_VOTE_TYPES = 17
       GENERAL_VOTE_TYPES = 18
-      VOTER_PHONE = 19
-      PHONE = 20
-      PHONE_TYPE = 21
-      PHONE_WIRELESS = 22
-      EMAIL = 23
-      EMAIL_APPEND_LEVEL = 24
+      PHONE = 19
+      VB_PHONE = 20
+      VB_PHONE_TYPE = 21
+      VB_PHONE_WIRELESS = 22
+      TS_WIRELESS_PHONE = 23
+      EMAIL = 24
+      EMAIL_APPEND_LEVEL = 25
 
       FIELDS = {
         ID => {:type => ::Thrift::Types::STRING, :name => 'id'},
@@ -218,10 +219,11 @@ module ThriftDefs
         NUM_PRIMARY_ELECTION_VOTES => {:type => ::Thrift::Types::I32, :name => 'num_primary_election_votes'},
         PRIMARY_VOTE_TYPES => {:type => ::Thrift::Types::MAP, :name => 'primary_vote_types', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::I32, :enum_class => ::ThriftDefs::VoterRecordTypes::VoteType}},
         GENERAL_VOTE_TYPES => {:type => ::Thrift::Types::MAP, :name => 'general_vote_types', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::I32, :enum_class => ::ThriftDefs::VoterRecordTypes::VoteType}},
-        VOTER_PHONE => {:type => ::Thrift::Types::STRING, :name => 'voter_phone'},
         PHONE => {:type => ::Thrift::Types::STRING, :name => 'phone'},
-        PHONE_TYPE => {:type => ::Thrift::Types::I32, :name => 'phone_type', :enum_class => ::ThriftDefs::VoterRecordTypes::PhoneType},
-        PHONE_WIRELESS => {:type => ::Thrift::Types::STRING, :name => 'phone_wireless'},
+        VB_PHONE => {:type => ::Thrift::Types::STRING, :name => 'vb_phone'},
+        VB_PHONE_TYPE => {:type => ::Thrift::Types::I32, :name => 'vb_phone_type', :enum_class => ::ThriftDefs::VoterRecordTypes::PhoneType},
+        VB_PHONE_WIRELESS => {:type => ::Thrift::Types::STRING, :name => 'vb_phone_wireless'},
+        TS_WIRELESS_PHONE => {:type => ::Thrift::Types::STRING, :name => 'ts_wireless_phone'},
         EMAIL => {:type => ::Thrift::Types::STRING, :name => 'email'},
         EMAIL_APPEND_LEVEL => {:type => ::Thrift::Types::I32, :name => 'email_append_level', :enum_class => ::ThriftDefs::VoterRecordTypes::EmailMatchType}
       }
@@ -235,8 +237,8 @@ module ThriftDefs
         unless @voter_score.nil? || ::ThriftDefs::VoterRecordTypes::VoterScore::VALID_VALUES.include?(@voter_score)
           raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field voter_score!')
         end
-        unless @phone_type.nil? || ::ThriftDefs::VoterRecordTypes::PhoneType::VALID_VALUES.include?(@phone_type)
-          raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field phone_type!')
+        unless @vb_phone_type.nil? || ::ThriftDefs::VoterRecordTypes::PhoneType::VALID_VALUES.include?(@vb_phone_type)
+          raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field vb_phone_type!')
         end
         unless @email_append_level.nil? || ::ThriftDefs::VoterRecordTypes::EmailMatchType::VALID_VALUES.include?(@email_append_level)
           raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field email_append_level!')

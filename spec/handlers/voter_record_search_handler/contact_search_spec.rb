@@ -2,16 +2,16 @@ RSpec.describe VoterRecordSearchHandler do
   let(:handler) { described_class }
 
   let(:headers) do
-    ThriftShop::Shared::RequestHeaders.new(
-      entity: ThriftShop::Shared::Entity.new(
+    ThriftDefs::RequestTypes::Headers.new(
+      entity: ThriftDefs::AuthTypes::Entity.new(
         uuid: SecureRandom.uuid,
-        role: ThriftShop::Shared::EntityRole::USER,
+        role: ThriftDefs::AuthTypes::EntityRole::USER,
       ),
     )
   end
 
   let(:request) do
-    ThriftShop::Verification::ContactSearchRequest.new(email: email,
+    ThriftDefs::RequestTypes::ContactSearch.new(email: email,
                                                        phone: raw_phone,
                                                        max_results: max_results)
   end
@@ -41,7 +41,7 @@ RSpec.describe VoterRecordSearchHandler do
 
     context 'invalid request' do
       it 'throws an exception' do
-        expect { subject }.to raise_error(ThriftShop::Shared::ArgumentException)
+        expect { subject }.to raise_error(ThriftDefs::ExceptionTypes::ArgumentException)
       end
     end
 
