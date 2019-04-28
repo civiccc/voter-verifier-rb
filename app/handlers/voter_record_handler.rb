@@ -1,9 +1,9 @@
 # RPC handlers for operating on voting records
 class VoterRecordHandler < ThriftServer::ThriftHandler
   include ThriftServer::Middleware::SkylightInstrumentation::Mixin
-  include Validation
+  include ThriftUtils::Validation
 
-  process ThriftShop::Verification::VerificationService, only: %i[
+  process ThriftDefs::VoterVerifier::Service, only: %i[
     get_voter_records_by_identifiers
   ]
 
@@ -18,11 +18,11 @@ class VoterRecordHandler < ThriftServer::ThriftHandler
           reject(&:nil?).
           map(&:to_thrift)
       else
-        raise ThriftShop::Shared::ArgumentException,
+        raise ThriftDefs::ExceptionTypes::ArgumentException,
               message: 'Invalid type of voter record identifier',
               path: 'request.voter_record_identifiers',
-              code: ThriftShop::Shared::ArgumentExceptionCode::INVALID
+              code: ThriftDefs::ExceptionTypes::ArgumentExceptionCode::INVALID
       end
-    ThriftShop::Verification::VoterRecords.new(voter_records: records)
+    ThriftDefs::VoterRecordTypes::VoterRecords.new(voter_records: records)
   end
 end

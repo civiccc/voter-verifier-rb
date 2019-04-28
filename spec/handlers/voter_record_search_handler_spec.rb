@@ -2,10 +2,10 @@ RSpec.describe VoterRecordSearchHandler do
   subject(:handler) { described_class }
 
   let(:headers) do
-    ThriftShop::Shared::RequestHeaders.new(
-      entity: ThriftShop::Shared::Entity.new(
+    ThriftDefs::RequestTypes::Headers.new(
+      entity: ThriftDefs::AuthTypes::Entity.new(
         uuid: '12345678-1234-1234-1234-123456781234',
-        role: ThriftShop::Shared::EntityRole::USER,
+        role: ThriftDefs::AuthTypes::EntityRole::USER,
       ),
     )
   end
@@ -25,7 +25,7 @@ RSpec.describe VoterRecordSearchHandler do
     shared_examples 'has an array of voter records' do
       it do
         expect(subject.voter_records).
-          to(match all(an_instance_of(ThriftShop::Verification::VoterRecord)))
+          to(match all(an_instance_of(ThriftDefs::VoterRecordTypes::VoterRecord)))
       end
     end
 
@@ -39,12 +39,12 @@ RSpec.describe VoterRecordSearchHandler do
 
         context 'when email is not nil' do
           let(:email) { 'test@example.com' }
-          it { is_expected.to be_an_instance_of(ThriftShop::Verification::VoterRecords) }
+          it { is_expected.to be_an_instance_of(ThriftDefs::VoterRecordTypes::VoterRecords) }
         end
 
         context 'when phone is not nil' do
           let(:phone) { '1234567890' }
-          it { is_expected.to be_an_instance_of(ThriftShop::Verification::VoterRecords) }
+          it { is_expected.to be_an_instance_of(ThriftDefs::VoterRecordTypes::VoterRecords) }
         end
       end
     end
@@ -57,11 +57,11 @@ RSpec.describe VoterRecordSearchHandler do
         subject
       end
 
-      it { is_expected.to be_an_instance_of(ThriftShop::Verification::VoterRecords) }
+      it { is_expected.to be_an_instance_of(ThriftDefs::VoterRecordTypes::VoterRecords) }
 
       it 'has an array of thrift voter records' do
         expect(subject.voter_records).
-          to(match all(an_instance_of(ThriftShop::Verification::VoterRecord)))
+          to(match all(an_instance_of(ThriftDefs::VoterRecordTypes::VoterRecord)))
       end
 
       context 'when the results are auto-verifiable' do
@@ -87,7 +87,7 @@ RSpec.describe VoterRecordSearchHandler do
 
     context 'when request is not valid' do
       shared_examples 'raises an argument exception' do
-        it { expect { subject }.to raise_error(ThriftShop::Shared::ArgumentException) }
+        it { expect { subject }.to raise_error(ThriftDefs::ExceptionTypes::ArgumentException) }
       end
 
       context 'because last name, email and phone are  all nil' do

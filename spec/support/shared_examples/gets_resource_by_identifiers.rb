@@ -44,11 +44,11 @@ RSpec.shared_examples_for 'gets resource by identifiers' do
       let(:request) { nil_request }
 
       it 'raises an ArgumentException' do
-        expect { subject }.to raise_exception ThriftShop::Shared::ArgumentException do |e|
+        expect { subject }.to raise_exception ThriftDefs::ExceptionTypes::ArgumentException do |e|
           expect(e).to have_attributes(
             message: 'Missing field',
             path: "request.#{identifiers_field_name}",
-            code: ThriftShop::Shared::ArgumentExceptionCode::PRESENCE,
+            code: ThriftDefs::ExceptionTypes::ArgumentExceptionCode::PRESENCE,
           )
         end
       end

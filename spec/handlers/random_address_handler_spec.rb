@@ -2,17 +2,17 @@ RSpec.describe RandomAddressHandler do
   subject(:handler) { described_class }
 
   let(:headers) do
-    ThriftShop::Shared::RequestHeaders.new(
-      entity: ThriftShop::Shared::Entity.new(
+    ThriftDefs::RequestTypes::Headers.new(
+      entity: ThriftDefs::AuthTypes::Entity.new(
         uuid: '12345678-1234-1234-1234-123456781234',
-        role: ThriftShop::Shared::EntityRole::USER,
+        role: ThriftDefs::AuthTypes::EntityRole::USER,
       ),
     )
   end
 
   let(:request) do
-    ThriftShop::Verification::RandomAddressRequest.new(
-      state: ThriftShop::CivicData::StateCode::CA,
+    ThriftDefs::RequestTypes::RandomAddress.new(
+      state: ThriftDefs::GeoTypes::StateCode::CA,
       seed: 42,
     )
   end
@@ -23,7 +23,7 @@ RSpec.describe RandomAddressHandler do
     subject { handler.get_random_addresses(headers, request) }
 
     shared_examples 'has an array of addresses' do
-      it { expect(subject.random_addresses).to(match_array([address.to_thrift])) }
+      it { expect(subject.addresses).to(match_array([address.to_thrift])) }
     end
 
     context 'when request is valid' do

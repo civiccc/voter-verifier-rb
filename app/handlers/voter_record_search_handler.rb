@@ -1,10 +1,10 @@
 # RPC handlers for searching voting records
 class VoterRecordSearchHandler < ThriftServer::ThriftHandler
   include ThriftServer::Middleware::SkylightInstrumentation::Mixin
-  include EnumConversion
-  include Validation
+  include ThriftUtils::EnumConversion
+  include ThriftUtils::Validation
 
-  process ThriftShop::Verification::VerificationService, only: %i[search contact_search]
+  process ThriftDefs::VoterVerifier::Service, only: %i[search contact_search]
 
   handle :search do |_headers, request|
     verify_field_presence(field: 'max_results', thrift_object: request)
@@ -38,7 +38,7 @@ class VoterRecordSearchHandler < ThriftServer::ThriftHandler
 
     thrift_matches = matches.map(&:to_thrift).each { |record| record.auto_verify = auto_verify }
 
-    ThriftShop::Verification::VoterRecords.new(
+    ThriftDefs::VoterRecordTypes::VoterRecords.new(
       voter_records: thrift_matches,
     )
   end
@@ -51,14 +51,8 @@ class VoterRecordSearchHandler < ThriftServer::ThriftHandler
 
     matches = VoterVerification::ContactSearch.lookup(request.email, phone, max_results)
     thrift_matches = matches.map(&:to_thrift)
-    ThriftShop::Verification::VoterRecords.new(voter_records: thrift_matches)
+    ThriftDefs::VoterRecordTypes::VoterRecords.new(voter_records: thrift_matches)
   end
 
-  def verify_at_least_one_field_present(fields, request)
-    return unless fields.none? { |field| request.public_send(field) }
 
-    raise ThriftShop::Shared::ArgumentException,
-          message: "Missing field: at least one of #{fields} must be present",
-          code: ThriftShop::Shared::ArgumentExceptionCode::PRESENCE
-  end
 end

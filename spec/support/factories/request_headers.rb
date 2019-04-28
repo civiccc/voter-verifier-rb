@@ -1,7 +1,7 @@
-require 'thrift_shop'
+require 'thrift_defs'
 
 FactoryBot.define do
-  factory :request_headers, class: ThriftShop::Shared::RequestHeaders do
+  factory :request_headers, class: ThriftDefs::RequestTypes::Headers do
     request_id { SecureRandom.uuid }
     context { FactoryBot.build(:request_context) }
 

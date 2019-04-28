@@ -1,10 +1,10 @@
 # RPC handlers for getting pseudo-random addresses in a given state
 class RandomAddressHandler < ThriftServer::ThriftHandler
   include ThriftServer::Middleware::SkylightInstrumentation::Mixin
-  include Validation
-  include EnumConversion
+  include ThriftUtils::Validation
+  include ThriftUtils::EnumConversion
 
-  process ThriftShop::Verification::VerificationService, only: %i[
+  process ThriftDefs::VoterVerifier::Service, only: %i[
     get_random_addresses
   ]
 
@@ -15,8 +15,8 @@ class RandomAddressHandler < ThriftServer::ThriftHandler
     )
     addresses = VoterRecordAddress.search(query.build)
 
-    ThriftShop::Verification::RandomAddresses.new(
-      random_addresses: addresses.map(&:to_thrift),
+    ThriftDefs::GeoTypes::Addresses.new(
+      addresses: addresses.map(&:to_thrift),
     )
   end
 end

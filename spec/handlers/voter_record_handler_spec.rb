@@ -2,10 +2,10 @@ RSpec.describe VoterRecordHandler do
   let(:handler) { described_class }
 
   let(:headers) do
-    ThriftShop::Shared::RequestHeaders.new(
-      entity: ThriftShop::Shared::Entity.new(
+    ThriftDefs::RequestTypes::Headers.new(
+      entity: ThriftDefs::AuthTypes::Entity.new(
         uuid: '12345678-1234-1234-1234-123456781234',
-        role: ThriftShop::Shared::EntityRole::USER,
+        role: ThriftDefs::AuthTypes::EntityRole::USER,
       ),
     )
   end
@@ -23,51 +23,51 @@ RSpec.describe VoterRecordHandler do
 
     let(:id_to_search) { '' }
     let(:request) do
-      ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new(
+      ThriftDefs::RequestTypes::GetVoterRecordsByIdentifiers.new(
         voter_record_identifiers:
-          ThriftShop::Verification::VoterRecordUniqueIdentifiers.new(ids: [id_to_search]),
+          ThriftDefs::VoterRecordTypes::UniqueIdentifiers.new(ids: [id_to_search]),
       )
     end
 
     let(:single_valid_request) do
-      ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new(
+      ThriftDefs::RequestTypes::GetVoterRecordsByIdentifiers.new(
         voter_record_identifiers:
-          ThriftShop::Verification::VoterRecordUniqueIdentifiers.new(ids: [matching_voter_id]),
+          ThriftDefs::VoterRecordTypes::UniqueIdentifiers.new(ids: [matching_voter_id]),
       )
     end
 
     let(:multiple_valid_request) do
-      ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new(
+      ThriftDefs::RequestTypes::GetVoterRecordsByIdentifiers.new(
         voter_record_identifiers:
-          ThriftShop::Verification::VoterRecordUniqueIdentifiers.new(
+          ThriftDefs::VoterRecordTypes::UniqueIdentifiers.new(
             ids: multiple_matching_voter_ids,
           ),
       )
     end
 
     let(:multiple_mixed_request) do
-      ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new(
+      ThriftDefs::RequestTypes::GetVoterRecordsByIdentifiers.new(
         voter_record_identifiers:
-          ThriftShop::Verification::VoterRecordUniqueIdentifiers.new(
+          ThriftDefs::VoterRecordTypes::UniqueIdentifiers.new(
             ids: [matching_voter_id, non_matching_voter_id],
           ),
       )
     end
 
     let(:multiple_invalid_request) do
-      ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new(
+      ThriftDefs::RequestTypes::GetVoterRecordsByIdentifiers.new(
         voter_record_identifiers:
-          ThriftShop::Verification::VoterRecordUniqueIdentifiers.new(
+          ThriftDefs::VoterRecordTypes::UniqueIdentifiers.new(
             ids: [non_matching_voter_id, 'STILLNOTANID'],
           ),
       )
     end
 
-    let(:nil_request) { ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new }
+    let(:nil_request) { ThriftDefs::RequestTypes::GetVoterRecordsByIdentifiers.new }
     let(:empty_request) do
-      ThriftShop::Verification::GetVoterRecordByIdentifiersRequest.new(
+      ThriftDefs::RequestTypes::GetVoterRecordsByIdentifiers.new(
         voter_record_identifiers:
-          ThriftShop::Verification::VoterRecordUniqueIdentifiers.new(ids: []),
+          ThriftDefs::VoterRecordTypes::UniqueIdentifiers.new(ids: []),
       )
     end
 
@@ -84,11 +84,11 @@ RSpec.describe VoterRecordHandler do
 
     it_behaves_like 'gets resource by identifiers'
 
-    it { is_expected.to be_a ThriftShop::Verification::VoterRecords }
+    it { is_expected.to be_a ThriftDefs::VoterRecordTypes::VoterRecords }
 
     it do
       is_expected.to have_attributes(
-        voter_records: all(be_a(ThriftShop::Verification::VoterRecord)),
+        voter_records: all(be_a(ThriftDefs::VoterRecordTypes::VoterRecord)),
       )
     end
   end

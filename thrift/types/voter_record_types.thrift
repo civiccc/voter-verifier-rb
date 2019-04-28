@@ -121,12 +121,13 @@ struct VoterRecord {
   16: i32 num_primary_election_votes,
   17: VoteTypeMap primary_vote_types ( description = "Maps an election type and year to a string classification of someone's participation in that year's primary election" ),
   18: VoteTypeMap general_vote_types ( description = "Maps an election type and year to a string classification of someone's participation in that year's general election" ),
-  19: PhoneNumber voter_phone ( description = "Phone number, sourced from the voter file" ),
-  20: PhoneNumber phone ( description = "Phone number, commercially sourced" ),
-  21: PhoneType phone_type ( description = "The type of phone number that `phone` is, e.g. landline, VOIP, wireless" ),
-  22: PhoneNumber phone_wireless ( description = "Wireless phone number, commercially sourced" ),
-  23: EmailAddress email ( description = "Email address, commercially-sourced" ),
-  24: EmailMatchType email_append_level ( description = "The level at which the email address is associated with the voter record: individual or household" ),
+  19: PhoneNumber phone ( description = "Phone number, sourced from the voter file" ),
+  20: PhoneNumber vb_phone ( description = "Phone number, commercially sourced" ),
+  21: PhoneType vb_phone_type ( description = "The type of phone number that `phone` is, e.g. landline, VOIP, wireless" ),
+  22: PhoneNumber vb_phone_wireless ( description = "Wireless phone number, commercially sourced" ),
+  23: PhoneNumber ts_wireless_phone ( description = "\"Best Available\" phone number, commercially sourced" ),
+  24: EmailAddress email ( description = "Email address, commercially-sourced" ),
+  25: EmailMatchType email_append_level ( description = "The level at which the email address is associated with the voter record: individual or household" ),
 }
 
 struct VoterRecords {

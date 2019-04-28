@@ -89,7 +89,6 @@ FactoryBot.define do
     ts_address_street_number '000'
     ts_address_unit_designator 'SUITE'
     ts_city 'SAN FRANCISCO'
-    ts_exact_track 'Y12345678901234'
     ts_lat_lng_location '35.1868,-106.6652'
     ts_st 'CA'
     ts_wireless_phone '1234567892'
