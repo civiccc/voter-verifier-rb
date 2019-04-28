@@ -39,7 +39,7 @@ RSpec.describe VoterRecord do
         street: '000 Third ST',
         apt_number: '1',
         street_name: 'THIRD',
-        ***REMOVED***
+        street_number: '000',
         unit_designator: 'SUITE',
         city: 'SAN FRANCISCO',
         state: ThriftShop::CivicData::StateCode::CA,

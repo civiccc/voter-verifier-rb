@@ -1,5 +1,5 @@
 RSpec.describe Queries::VoterRecord::Preprocessors::Address do
-  let(:street_address) { '***REMOVED***' }
+  let(:street_address) { '000 Main St' }
   let(:city) { 'Portsmouth' }
   let(:state) { 'NH' }
   let(:zip_code_plus_4) { '00210-1234' }

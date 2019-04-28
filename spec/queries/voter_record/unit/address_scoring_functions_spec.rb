@@ -42,7 +42,7 @@ RSpec.describe Queries::VoterRecord::ScoreFunctions::Address do
 
     describe '::street_city_and_state' do
       subject(:city_state) { described_class.street_city_and_state(street_address, city, state) }
-      let(:street_address) { '***REMOVED***' }
+      let(:street_address) { '000 Main St' }
       let(:expected) do
         [
           hash_including(boost_factor: 1),
