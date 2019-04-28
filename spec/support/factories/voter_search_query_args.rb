@@ -6,7 +6,7 @@ FactoryBot.define do
     dob Date.new(2014, 8, 1)
     email 'testy.mctesterson@example.com'
     phone '123-456-7890'
-    street_address '***REMOVED***'
+    street_address '000 Third St'
     city 'San Francisco'
     state 'CA'
     zip_code '94118'

@@ -15,10 +15,7 @@ class VerificationServer
       port: configatron.server.port,
     )
 
-    @server.use ThriftServer::Middleware::SkylightInstrumentation
-    @server.subscribe ThriftServer::Instrumentation::Logging.
-      new(logger: LOGGER, error_handler: Raven.method(:capture_exception))
-    @server.subscribe ThriftServer::Instrumentation::Metrics.new(statsd: STATSD)
+    @server.subscribe ThriftServer::Instrumentation::Logging.new(logger: LOGGER)
   end
 
   def start!
