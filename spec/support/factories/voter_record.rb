@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :voter_record do
     activist_score '54.3'
-    address '524 THIRD ST'
+    address '000 Third ST'
     address_apt_number nil
     address_street_name 'THIRD'
     address_street_number '524'
@@ -83,7 +83,7 @@ FactoryBot.define do
     teaparty_score '11.9'
     trump_resistance_score '56.9'
     trump_support_score '11.4'
-    ts_address '524 THIRD STREET'
+    ts_address '000 Third STREET'
     ts_address_apt_number '1'
     ts_address_street_name 'THIRD'
     ts_address_street_number '524'

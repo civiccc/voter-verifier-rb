@@ -10,7 +10,7 @@ RSpec.describe Queries::VoterRecord::Query do
   let(:alt_last_name) { 'MacTesterson' }
   let(:alt_middle_name) { 'Quincy' }
   let(:dob) { Time.new 2014, 8, 1 }
-  let(:street_address) { '***REMOVED***' }
+  let(:street_address) { '000 Third St' }
   let(:city) { 'San Francisco' }
   let(:state) { 'CA' }
   let(:zip_code) { '94105' }

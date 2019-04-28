@@ -36,7 +36,7 @@ RSpec.describe VoterRecord do
   describe '#to_thrift' do
     let(:expected_address_attributes) do
       {
-        street: '524 THIRD ST',
+        street: '000 Third ST',
         apt_number: '1',
         street_name: 'THIRD',
         ***REMOVED***

@@ -4,7 +4,7 @@ RSpec.describe Queries::VoterRecord::Query do
   let(:last_name) { 'McTesterson' }
   let(:dob) { Time.new 2014, 8, 1 }
   let(:zip_code) { '94105' }
-  let(:street_address) { '***REMOVED***' }
+  let(:street_address) { '000 Third St' }
   let(:city) { 'San Francisco' }
   let(:state) { 'CA' }
 
