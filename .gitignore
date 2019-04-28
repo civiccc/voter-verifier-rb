@@ -8,3 +8,4 @@ config/configatron/local.rb
 tmp/
 log/*
 vendor/
+/build/

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -euo pipefail
+
+input_dir=thrift/types
+build_dir=build
+rb_namespace=thrift_defs
+output_dir=thrift/ruby/lib
+
+
+rm -rf $build_dir
+mkdir -p $build_dir
+for thrift_file in $(find $input_dir -name *.thrift -print)
+do
+  echo "Processing $thrift_file"
+  thrift --gen rb:namespaced -o $build_dir -strict $thrift_file
+done
+
+find $build_dir -iname '*.bak' -type f -delete
+$(dirname $0)/verify-thrift.rb $build_dir
+
+echo "Moving final files into place"
+rm -rf $output_dir/$rb_namespace
+mv $build_dir/gen-rb/$rb_namespace $output_dir

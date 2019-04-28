@@ -12,6 +12,7 @@ gem 'elasticsearch-dsl'
 
 gem 'service_utilities', git: 'git@github.com:brigade/service-utilities.git'
 gem 'thrift_shop', git: 'git@github.com:brigade/thrift-shop-generated-rb.git'
+gem 'thrift_defs', path: 'thrift/ruby'
 gem 'thrift'
 
 group :development, :test do

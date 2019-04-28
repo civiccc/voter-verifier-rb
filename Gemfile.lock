@@ -21,6 +21,12 @@ GIT
     thrift_shop (0.0.1)
       thrift
 
+PATH
+  remote: thrift/ruby
+  specs:
+    thrift_defs (0.1.0)
+      thrift
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -140,6 +146,7 @@ DEPENDENCIES
   sentry-raven
   service_utilities!
   thrift
+  thrift_defs!
   thrift_shop!
   timecop
 
