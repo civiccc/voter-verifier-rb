@@ -1,8 +1,4 @@
-RSpec.describe Queries::VoterRecord::Query do
-  shared_examples 'builds an elasticsearch query' do
-    it { is_expected.to be_an_instance_of Elasticsearch::DSL::Search::Search }
-  end
-
+RSpec.describe Queries::VoterRecord::Search do
   let(:first_name) { 'Testy' }
   let(:middle_name) { 'Q' }
   let(:last_name) { 'McTesterson' }
@@ -37,6 +33,15 @@ RSpec.describe Queries::VoterRecord::Query do
 
     context 'with all fields provided' do
       it_behaves_like 'builds an elasticsearch query'
+
+      describe 'query hash' do
+        include_context 'query hash'
+        it do
+          is_expected.to match hash_including(
+            min_score: described_class::MIN_SCORE_AUTO_WITH_DOB,
+          )
+        end
+      end
     end
 
     context 'with no alt names provided' do
@@ -70,6 +75,11 @@ RSpec.describe Queries::VoterRecord::Query do
       let(:dob) { nil }
 
       it_behaves_like 'builds an elasticsearch query'
+
+      describe 'query hash' do
+        include_context 'query hash'
+        it { is_expected.to match hash_including(min_score: described_class::MIN_SCORE_AUTO_NO_DOB) }
+      end
     end
 
     context 'with nil zip code' do
@@ -110,6 +120,11 @@ RSpec.describe Queries::VoterRecord::Query do
 
     context 'with all fields provided' do
       it_behaves_like 'builds an elasticsearch query'
+
+      describe 'query hash' do
+        include_context 'query hash'
+        it { is_expected.to match hash_including(min_score: described_class::MIN_SCORE_TOP) }
+      end
     end
 
     context 'with nil first and middle names' do
@@ -160,6 +175,79 @@ RSpec.describe Queries::VoterRecord::Query do
       let(:lat) { nil }
 
       it_behaves_like 'builds an elasticsearch query'
+    end
+  end
+
+  describe '#initialize' do
+    context 'with nil last_name' do
+      subject do
+        described_class.new(
+          last_name: nil,
+          size: 3,
+        )
+      end
+
+      it { is_expected.to be_a described_class }
+    end
+  end
+
+  describe '#can_auto_verify?' do
+    subject { super().send(:can_auto_verify?) }
+
+    context 'when none of dob, zip_code, first_name and middle_name are nil' do
+      it 'should return true' do
+        expect(subject).to be true
+      end
+    end
+
+    context 'when dob and zip_code are both nil' do
+      let!(:dob) { nil }
+      let!(:zip_code) { nil }
+
+      it 'should return false' do
+        expect(subject).to be false
+      end
+    end
+
+    context 'when only dob is nil' do
+      let!(:dob) { nil }
+
+      it 'should return true' do
+        expect(subject).to be true
+      end
+    end
+
+    context 'when only zip code is nil' do
+      let!(:zip_code) { nil }
+
+      it 'should return true' do
+        expect(subject).to be true
+      end
+    end
+
+    context 'when first_name and middle_name are both nil' do
+      let!(:first_name) { nil }
+      let!(:middle_name) { nil }
+
+      it 'should return false' do
+        expect(subject).to be false
+      end
+    end
+
+    context 'when only first_name is nil' do
+      let!(:first_name) { nil }
+
+      it 'should return true' do
+        expect(subject).to be true
+      end
+    end
+
+    context 'when only middle_name is nil' do
+      let!(:middle_name) { nil }
+
+      it 'should return true' do
+        expect(subject).to be true
+      end
     end
   end
 end

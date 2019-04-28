@@ -14,7 +14,7 @@ module Queries
           end
 
           def self.exact(value)
-            filter = Clauses::DOB::Year.exact(Queries::Filter.new, value)
+            filter = Clauses::DOB::Year.exact(DSL::Filter.new, value)
             boost_factor(5, filter)
           end
         end
@@ -36,7 +36,7 @@ module Queries
           end
 
           def self.exact(value)
-            filter = Clauses::DOB::Month.exact(Queries::Filter.new, value)
+            filter = Clauses::DOB::Month.exact(DSL::Filter.new, value)
             boost_factor(2, filter)
           end
 
@@ -45,7 +45,7 @@ module Queries
           end
 
           def self.missing_or_is_first
-            filter = Clauses::DOB::Month.missing_or_is_first(Queries::Filter.new)
+            filter = Clauses::DOB::Month.missing_or_is_first(DSL::Filter.new)
             boost_factor(1, filter)
           end
         end
@@ -67,7 +67,7 @@ module Queries
           end
 
           def self.exact(value)
-            filter = Clauses::DOB::Day.exact(Queries::Filter.new, value)
+            filter = Clauses::DOB::Day.exact(DSL::Filter.new, value)
             boost_factor(2, filter)
           end
 
@@ -76,7 +76,7 @@ module Queries
           end
 
           def self.missing_or_is_first
-            filter = Clauses::DOB::Day.missing_or_is_first(Queries::Filter.new)
+            filter = Clauses::DOB::Day.missing_or_is_first(DSL::Filter.new)
             boost_factor(1, filter)
           end
         end

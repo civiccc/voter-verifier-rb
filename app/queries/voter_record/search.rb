@@ -1,22 +1,10 @@
-require 'elasticsearch/dsl'
-
-# Query builder for searching the votizen_voter index in ElasticSearch
 module Queries
-  include Elasticsearch::DSL
-
   module VoterRecord
-    # Definitions of document filter clauses used to narrow down results
-    module Clauses; end
-
-    # Definitions of function_score functions used to adjust document match scores
-    # The available types are:
-    module ScoreFunctions; end
-
     # Factory class to build the available Voter Record Elasticsearch query types
     # - auto: A restrictive search intended to find a single, high-confidence match (or no matches)
     # - top: A somewhat permissive search intended to find either a single, high-confidence match
     #        or multiple medium-confidence matches (or no matches)
-    class Query
+    class Search
       MIN_SCORE_AUTO_WITH_DOB = 14.9
       MIN_SCORE_AUTO_NO_DOB = 11.9
       MIN_SCORE_TOP = 7.0
@@ -58,7 +46,7 @@ module Queries
         return unless can_auto_verify?
 
         query = self
-        filters = Queries::Filter.new do
+        filters = DSL::Filter.new do
           bool do
             must do
               Clauses::Name::Last.exact(self, query.last_name, query.alt_last_name)
@@ -94,7 +82,7 @@ module Queries
       def top
         query = self
 
-        filters = Queries::Filter.new do
+        filters = DSL::Filter.new do
           bool do
             must do
               # TODO enforce either last_name or one of email/phone
@@ -140,16 +128,16 @@ module Queries
         if email.blank? || phone.blank?
           # if phone, do a constant_score on the match clause
           if email.blank?
-            filters = [Clauses::Phone.exact(Queries::Filter.new, query.phone)]
+            filters = [Clauses::Phone.exact(DSL::Filter.new, query.phone)]
             build_with_constant_score(filters)
           # if email, just do the match clause
           else
-            Queries::Search.new { query Clauses::Email.exact(Queries::Query.new, query.email) }
+            DSL::Search.new { query Clauses::Email.exact(DSL::Query.new, query.email) }
           end
         # both?
         else
           # use phone number as a filter
-          filters = [Clauses::Phone.exact(Queries::Filter.new, phone)]
+          filters = [Clauses::Phone.exact(DSL::Filter.new, phone)]
           # use email as the filter function, build with function_score
           build_with_function_score(filters)
         end
@@ -199,7 +187,7 @@ module Queries
 
       def build_with_constant_score(filters)
         size = @size
-        Queries::Search.new do
+        DSL::Search.new do
           query do
             constant_score do
               filter filters
@@ -213,7 +201,7 @@ module Queries
         functions = function_scores
         size = @size
 
-        Queries::Search.new do
+        DSL::Search.new do
           query do
             function_score do
               filter filters

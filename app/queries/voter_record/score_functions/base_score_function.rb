@@ -8,7 +8,7 @@ module Queries
         end
 
         def is_missing(factor, field)
-          filter = Queries::Filter.new.missing field: field
+          filter = DSL::Filter.new.missing field: field
           boost_factor(factor, filter)
         end
       end

@@ -9,11 +9,11 @@ class RandomAddressHandler < ThriftServer::ThriftHandler
   ]
 
   handle :get_random_addresses do |_headers, request|
-    query = Queries::VoterRecord::RandomAddressQuery.new(
+    query = Queries::VoterRecord::RandomAddress.new(
       state: thrift_to_state_code(enum: request.state),
       seed: request.seed,
     )
-    addresses = VoterRecordAddress.search(query.build)
+    addresses = VoterRecordAddress.search(query.offset_from_seed)
 
     ThriftDefs::GeoTypes::Addresses.new(
       addresses: addresses.map(&:to_thrift),
