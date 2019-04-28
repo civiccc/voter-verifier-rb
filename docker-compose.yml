@@ -6,13 +6,6 @@
 version: '2.1'
 
 services:
-  # *_base services can be defined within the compose file as seen here or
-  # referenced from another file on disk. Use these entries to define configurations
-  # core to the particular service type and/or viewed as standards across our
-  # infrastructure (e.g. image)
-  # TODO ask miller if any of this is relevant:
-  # ref ***REMOVED******REMOVED*** for
-  # more details and predefined *_base services defined by infrastructure
   voter-verifier_base:
     build:
       context: .
@@ -21,7 +14,6 @@ services:
       APP_UID:
       APP_GID:
       ELASTICSEARCH_HOSTS: http://docker-host:9200/
-      SERVICE_HOST: docker-host
     # Add healthchecks with appropriate parameters to see if the service is actually listening on
     # the port. Note: This interval and retries are set for smaller services that come up relatively fast.
     # For bigger services these may need to be tweaked.
@@ -32,13 +24,6 @@ services:
       interval: 1s
       timeout: 10s
       retries: 120
-    # Provide port mapping specification, as defined and leveraged by proximo
-    # within staging and production environments, in order to avoid port conflicts
-    # across services.
-    # TODO ask miller if these are relevant
-    # ref: ***REMOVED******REMOVED***)
-    # for examples.
-    # e.g.:
     ports:
       - '9095:9095'
       - '3000:3000'
@@ -79,5 +64,5 @@ services:
 
 # Define names of volumes that you want to be preserved between container restarts.
 # These are referenced above in the `volumes` section of the service.
-volumes:
-  elasticsearch:
+# volumes:
+#   elasticsearch:
