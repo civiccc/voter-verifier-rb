@@ -4,7 +4,7 @@ module Queries
       # Query clauses for email fields
       module Email
         def self.exact(parent_clause, value)
-          parent_clause.term email: value
+          parent_clause.match email: value
         end
       end
     end

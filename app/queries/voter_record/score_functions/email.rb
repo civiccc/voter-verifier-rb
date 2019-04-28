@@ -8,7 +8,7 @@ module Queries
         extend BaseScoreFunction
 
         def self.exact(value)
-          filter = Clauses::Email.exact(Queries::Filter.new, value)
+          filter = Queries::Filter.new { Clauses::Email.exact(Queries::Query.new, value) }
           boost_factor(8, filter)
         end
       end
