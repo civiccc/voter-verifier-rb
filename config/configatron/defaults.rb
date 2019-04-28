@@ -12,12 +12,6 @@ configatron.logger do |logger|
   end
 end
 
-configatron.field_encryption do |e|
-  # `#keys` is reserved in configatron
-  e.fe_keys = { 'AES|1' => Base64.decode64(ENV['FIELD_ENCRYPTION_KEY']) }
-  e.current_scheme = e.fe_keys.keys.last
-end
-
 configatron.elasticsearch do |es|
   es.timeout = ENV['ELASTICSEARCH_TIMEOUT'] || 15
   es.retries = ENV['ELASTICSEARCH_RETRIES'] || 1
