@@ -5,9 +5,7 @@
 
 set -euo pipefail
 
-# TODO check with miller about these
-source /***REMOVED***
-source /***REMOVED***
+# TODO get missing output.bash and artifact.bash in here
 
 wait-for-elasticsearch() {
   echo "Waiting for Elasticsearch..."
