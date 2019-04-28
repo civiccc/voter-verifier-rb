@@ -1,11 +1,11 @@
-RSpec.describe Queries::VoterRecord::RandomAddressQuery do
+RSpec.describe Queries::VoterRecord::RandomAddress do
   let(:limit) { 10 }
   let(:state) { 'CA' }
   let(:seed) { '42' }
   let(:random_address_query) { described_class.new(state: state, seed: seed, limit: 10) }
 
   describe '#build' do
-    subject { random_address_query.build }
+    subject { random_address_query.offset_from_seed }
 
     before do
       allow(Queries::VoterRecord::Clauses::Address::State).to(

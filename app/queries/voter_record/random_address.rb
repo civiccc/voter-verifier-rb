@@ -1,10 +1,10 @@
 require_relative 'clauses/address'
 
-# TODO get rid of the magic max_offset number
+# TODO better approach to verification
 module Queries
   module VoterRecord
     # Elasticsearch query for retrieving <limit> pseudo-random addresses in a given state
-    class RandomAddressQuery
+    class RandomAddress
       MAX_OFFSET = 50_000
 
       attr_reader :limit, :seed, :state
@@ -15,10 +15,10 @@ module Queries
         @seed = seed.to_i
       end
 
-      def build
+      def offset_from_seed
         query = self
 
-        Queries::Search.new do
+        DSL::Search.new do
           Queries::VoterRecord::Clauses::Address::State.exact(self, query.state)
 
           size query.limit

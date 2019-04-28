@@ -8,7 +8,7 @@ module Queries
         extend BaseScoreFunction
 
         def self.exact(value)
-          filter = Clauses::Phone.exact(Queries::Filter.new, value)
+          filter = Clauses::Phone.exact(DSL::Filter.new, value)
           boost_factor(8, filter)
         end
       end

@@ -19,7 +19,7 @@ RSpec.describe VoterVerification::Search do
   let(:mocked_results) { [voter_record] }
 
   before do
-    allow(Queries::VoterRecord::Query).to receive(:new).and_call_original
+    allow(Queries::VoterRecord::Search).to receive(:new).and_call_original
     allow(VoterRecord).to receive(:search).
       with(an_instance_of(Elasticsearch::DSL::Search::Search)).
       and_return(mocked_results)
@@ -28,10 +28,10 @@ RSpec.describe VoterVerification::Search do
   shared_examples 'executes a query and returns and array of VoterRecords' do |should_auto_verify|
     it 'builds a query object from the query_args and size = max_results + 1' do
       subject
-      expect(Queries::VoterRecord::Query).to have_received(:new).with(
+      expect(Queries::VoterRecord::Search).to have_received(:new).with(
         hash_including(query_args),
       )
-      expect(Queries::VoterRecord::Query).to have_received(:new).with(
+      expect(Queries::VoterRecord::Search).to have_received(:new).with(
         hash_including(size: max_results + 1),
       )
     end
@@ -46,7 +46,7 @@ RSpec.describe VoterVerification::Search do
 
     context 'when smart_search is enabled' do
       it 'calls search with an auto query' do
-        expect_any_instance_of(Queries::VoterRecord::Query).
+        expect_any_instance_of(Queries::VoterRecord::Search).
           to receive(:auto).and_call_original
         expect(VoterRecord).to receive(:search).
           with(an_instance_of(Elasticsearch::DSL::Search::Search)).
@@ -74,7 +74,7 @@ RSpec.describe VoterVerification::Search do
 
       context 'and results are auto-verified' do
         it 'does not call search with a top query' do
-          expect_any_instance_of(Queries::VoterRecord::Query).not_to receive(:top)
+          expect_any_instance_of(Queries::VoterRecord::Search).not_to receive(:top)
           subject
         end
 
@@ -92,7 +92,7 @@ RSpec.describe VoterVerification::Search do
         it_behaves_like 'executes a query and returns and array of VoterRecords', false
 
         it 'calls search with an auto query' do
-          expect_any_instance_of(Queries::VoterRecord::Query).
+          expect_any_instance_of(Queries::VoterRecord::Search).
             to receive(:auto).and_call_original
 
           expect(VoterRecord).to receive(:search).with(nil).and_return([])
@@ -101,7 +101,7 @@ RSpec.describe VoterVerification::Search do
         end
 
         it 'calls search with a top query' do
-          expect_any_instance_of(Queries::VoterRecord::Query).
+          expect_any_instance_of(Queries::VoterRecord::Search).
             to receive(:top).and_call_original
           expect(VoterRecord).to receive(:search).
             with(an_instance_of(Elasticsearch::DSL::Search::Search)).

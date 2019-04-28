@@ -13,7 +13,7 @@ module VoterVerification
       # Fetch one more than the desired max from Elasticsearch so that when
       # we group into equivalence classes, we know whether the last group
       # is small enough to fit under the max results.
-      @query = Queries::VoterRecord::Query.new(
+      @query = Queries::VoterRecord::Search.new(
         query_args.merge(size: @max_results + 1),
       )
       @smart_search = smart_search
