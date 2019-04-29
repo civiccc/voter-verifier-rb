@@ -1,5 +1,5 @@
 # Voter Record Data Fields
-Voter Verifier is offered "batteries not included," meaning the raw data from voter records necessary to make it useful is not included. But if you already have voter record data, this is what general data points Voter Verifier assumes to exist in an ElasticSearch index. They are divided into groups below and explained in more detail. Some groups are used in the matching process, and some are only returned in results.
+Voter Verifier is offered "BYOD" (bring your own data), meaning the raw data from voter records necessary to make it useful is not included. But if you already have voter record data, this is what general data points Voter Verifier assumes to exist in an ElasticSearch index. They are divided into groups below and explained in more detail. Some groups are used in the matching process, and some are only returned in results.
 
 | Group | Used in Matching? |
 | ----- | ----------------- |

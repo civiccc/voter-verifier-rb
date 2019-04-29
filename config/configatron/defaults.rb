@@ -1,5 +1,5 @@
 configatron.server do |server|
-  server.port = ENV['PORT']&.to_i || 9095
+  server.port = ENV['VOTER_VERIFIER_PORT']&.to_i || 9095
 end
 
 configatron.logger do |logger|
@@ -13,11 +13,11 @@ configatron.logger do |logger|
 end
 
 configatron.elasticsearch do |es|
-  es.timeout = ENV['ELASTICSEARCH_TIMEOUT'] || 15
-  es.retries = ENV['ELASTICSEARCH_RETRIES'] || 1
-  es.hosts = (ENV['ELASTICSEARCH_HOSTS'] || 'localhost:9200').split(',')
-  es.voter_record_index = ENV['ELASTICSEARCH_INDEX'] || 'voter_verifier'
-  es.voter_record_doc_type = ENV['ELASTICSEARCH_DOC_TYPE'] || 'voters'
+  es.timeout = ENV['VOTER_VERIFIER_ES_TIMEOUT'] || 15
+  es.retries = ENV['VOTER_VERIFIER_ES_RETRIES'] || 1
+  es.hosts = (ENV['VOTER_VERIFIER_ES_HOSTS'] || 'localhost:9200').split(',')
+  es.voter_record_index = ENV['VOTER_VERIFIER_ES_INDEX'] || 'voter_verifier'
+  es.voter_record_doc_type = ENV['VOTER_VERIFIER_ES_DOC_TYPE'] || 'voter_record'
 end
 
 configatron.search do |s|
