@@ -6,6 +6,7 @@
 ### Definitions
 These are the fields defined on the index. The full ElasticSearch options for each field spec are in the [table below](#field-specs).
 | id | unanalyzed_string_type |
+| -- | ---------------------- |
 | first_name | name_type |
 | first_name_compact | name_compact_type |
 | middle_name | name_type |
@@ -117,7 +118,7 @@ The index uses the following field specs, which have been configured to strike a
 | boolean_type | `{"type": "boolean"}` |
 | geo_point_type | `{"type": "geo_point", "fielddata" : {"format" : "compressed", "precision" : "3m"} }` |
 
-> Note: adjusting the precision level on geo_point_type has a significant effect on both index size and query performance.ß
+> Note: adjusting the precision level on geo_point_type has a significant effect on both index size and query performance.
 
 ## Tokenizers
 
