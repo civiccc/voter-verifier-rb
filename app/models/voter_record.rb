@@ -14,15 +14,11 @@ class VoterRecord < ElasticSearchDocument
     climate_change_score
     college_funding_score
     college_graduate_score
-    county
     dob_day
     dob_month
     dob_year
-    effective_date
     email
     email_append_level
-    email_match_type
-    email_presence_flag
     evangelical_score
     first_name
     first_name_compact
@@ -78,7 +74,6 @@ class VoterRecord < ElasticSearchDocument
     race_white_score
     registration_date
     st
-    status_flag
     suffix
     tax_on_wealthy_score
     teaparty_score
@@ -94,7 +89,6 @@ class VoterRecord < ElasticSearchDocument
     ts_st
     ts_wireless_phone
     ts_zip_code
-    urbanicity_rank
     vb_phone
     vb_phone_type
     vb_phone_wireless
