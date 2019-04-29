@@ -5,8 +5,10 @@
 
 ### Definitions
 These are the fields defined on the index. The full ElasticSearch options for each field spec are in the [table below](#field-specs).
+
+| Name | Type |
+| ---- | ---- |
 | id | unanalyzed_string_type |
-| -- | ---------------------- |
 | first_name | name_type |
 | first_name_compact | name_compact_type |
 | middle_name | name_type |
