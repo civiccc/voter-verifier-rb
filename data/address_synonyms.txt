@@ -1,0 +1,142 @@
+# Based on http://geosearch.googlecode.com/hg-
+# history/80a8c39d7727c4abf0957f12ba5d72b0385cd752/solr/conf/synonyms.txt,
+# which is under the ASF license. I have made modifications. "This file"
+# below refers to just this list of synonyms.
+#
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# ("the License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an AS IS BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+and,&,between
+int'l,international,intl
+north => n
+south => s
+east  => e
+west  => w
+north west => nw
+north east => ne
+south west => sw
+south east => se
+northwest => nw
+northeast => ne
+southwest => sw
+southeast => se
+
+# USPS Suffix Abbreviations
+# https://www.usps.com/send/official-abbreviations.htm
+# I try to put the most-likely-ambiguous term first, in case an instance of
+# it doesn't really mean those other terms. When expand=false, all the
+# rightward terms get turned into the first term. That way, we don't have
+# st turning into street all the time, even when it means saint. This
+# may not matter at all. Think about it when awake.
+st,street,str,saint,strt,streets
+ave,av,avenue,avnue,avenue,avenu
+dr,drive,drv,driv,drives
+boulevard,blvd,boul,boulv
+bridge,brdge,brg
+bypass,byp,bypa,bypas,byps
+cliff,clf,cliffs,clfs
+club,clb
+common,cmn
+corner,cor,corners,cors
+center,cen,cent,center,centr,centre,cnter,cntr,ctr,centers,ctrs
+cir,circ,circl,circle,crcl,circle,crcle
+court,crt,ct,courts
+ctsck,cr,creek,crk
+crossing,crssing,crssng,xing
+crecent,cres,crescent,cresent,crscnt,crsent,crsnt
+exp,expr,express,expressway,expw,expy,expwy
+fall,falls,fls
+ferry,frry,fry
+field,fld,fields,flds
+freeway,freewy,frway,frwy,fwy
+garden,gardn,gdn,grden,grdn,gardens,gdns,grdns
+gateway,gatewy,gatway,gtway,gtwy
+grov,grove,grv,groves
+harb,harbor,harbr,hbr,hrbor,harbors
+height,heights,hgts,ht,hts
+highway,highwy,hiway,hiwy,hway,hwy
+hill,hl,hills,hls
+is,island,islnd,islands,islnds,iss,isle,isles
+jct,jction,jctn,junction,junctn,juncton,jctns,jcts,junctions
+lake,lk,lakes,lks
+landing,lndg,lndng
+la,lane,lanes,ln
+lp,loop,loops
+manor,mnr,manors,mnrs
+mdw,meadow,mdws,meadows,medows
+ml,mill,mills,mls
+mt,mnt,mount
+mntain,mntn,mountain,mountin,mtin,mtn,mntns,mountains
+orch,orchard,orchrd
+pk,park,prk,parks
+parkway,parkwy,pkway,pkwy,pky,parkways,pkwys
+plaza,plz,plza
+pl => plaza, place
+pr,prairie,prarie,prr
+ranch,ranches,rnch,rnchs
+rdg,rdge,ridge,rdgs,ridges
+riv,river,rivr,rvr
+rd,road,rds,roads
+rteshls,shoals
+shoar,shore,shr,shoars,shores,shrs
+spg,spng,spring,sprng,spgs,spngs,springs,sprngs
+sq,sqr,sqre,squ,square,sqrs,squares
+sta,station,statn,stn
+stream,streme,strm
+smt,sumit,sumitt,summit
+ter,terr,terrace
+tr,trail,trails,trl,trls
+tunel,tunl,tunls,tunnel,tunnels,tunnl
+un,union,unions
+valley,vally,vlly,vly,valleys,vlys
+vdct,via,viadct,viaduct
+vw,view,views,vws
+vill,villag,village,villg,villiage,vlg,villages,vlgs
+vl,ville
+vis,vist,vista,vst,vsta
+wy,way,ways
+apartment,apt
+basement,bsmt
+building,bldg
+department,dept,dpt
+fl,floor,flr
+front,frnt
+hangar,hngr
+lobby,lbby
+lower,lowr
+office,ofc
+ph,penthouse
+rm,room
+space,spc
+stop,stp
+suite,ste
+trailer,trlr
+upper,uppr
+first => 1st
+second => 2nd
+third => 3rd
+fourth => 4th
+fifth => 5th
+sixth => 6th
+seventh => 7th
+eighth => 8th
+ninth => 9th
+tenth => 10th
+eleventh => 11th
+twelfth => 12th
+thirteenth => 13th
+fourteenth => 14th
+fifteenth => 15th
+sixteenth => 16th
+seventeenth => 17th
+eighteenth => 18th
+nineteenth => 19th
+twentieth => 20th
