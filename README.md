@@ -17,6 +17,7 @@ Requirements
 Getting Started
 ---------------
 1. Build your index and doc type
+
     The way this was tooled before was not open-source-able. It should be re-tooled. In the meantime, you'll need to use whatever method you prefer to build an ElasticSearch index and doc type that matches the specifications in [elasticsearch.md](./elasticsearch.md). There are two json files in `data/` that will help some: [elasticsearch_index_mapping.json](./data/elasticsearch_index_mapping.json) and [elasticsearch_index_settings.json](./data/elasticsearch_index_settings.json). The worst part will be the synonym filters, which need to be substituted into `elasticsearch_index_settings.json` from `data/address_synonyms.txt` and `data/first_name_synonyms.txt`. You'll need the name of the index and the doc type in a later step. The index name and doc type the queries will use are configurable, but have a default of `voter_verifier` for the index and `voter_record` for the doc type.
 
 1. Start your ElasticSearch cluster
