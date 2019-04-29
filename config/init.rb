@@ -6,9 +6,8 @@ def require_dir(path_from_root)
     sort.each { |f| require f }
 end
 
-# Determine the code environment
-ENV['VOTER_VERIFIER_ENV'] ||=
-  ENV['RAILS_ENV'] || ENV['RACK_ENV'] || 'development'
+# Determine the code environment, defaulting to prod
+ENV['VOTER_VERIFIER_ENV'] ||= 'production'
 
 # Load up gems automatically
 Bundler.require(:default, ENV['VOTER_VERIFIER_ENV'].to_sym)

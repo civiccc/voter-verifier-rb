@@ -1,0 +1,55 @@
+{
+  "index": {
+    "analysis": {
+      "analyzer": {
+        "address_analyzer": {
+          "type": "custom",
+          "tokenizer": "address_tokenizer",
+          "filter": ["lowercase", "address_synonym"]
+        },
+        "name_analyzer": {
+          "type": "custom",
+          "tokenizer": "name_tokenizer",
+          "filter": ["lowercase"]
+        },
+        "name_compact_analyzer": {
+          "type": "custom",
+          "tokenizer": "keyword",
+          "filter": ["lowercase", "alphanumeric"]
+        },
+        "first_name_analyzer": {
+          "type": "custom",
+          "tokenizer": "name_tokenizer",
+          "filter": ["lowercase", "first_name_synonym"]
+        }
+      },
+      "filter": {
+        "address_synonym": {
+          "type": "synonym",
+          "synonyms": $addressSynonyms,
+          "expand": false
+        },
+       "first_name_synonym": {
+          "type": "synonym",
+          "synonyms": $firstNameSynonyms,
+          "expand": true
+        },
+        "alphanumeric": {
+          "type": "pattern_replace",
+          "pattern": "[^a-zA-Z0-9]",
+          "replacement": ""
+        }
+      },
+      "tokenizer": {
+        "address_tokenizer": {
+          "type": "pattern",
+          "pattern": "[^a-zA-Z0-9]+"
+        },
+        "name_tokenizer": {
+          "type": "pattern",
+          "pattern": "[^a-zA-Z0-9']+"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+	"_source": {"enabled": true},
+	"_all": {"enabled": false},
+	"properties": {
+	  "id": {"type": "string", "index": "not_analyzed"},
+	  "first_name": {"type": "string", "analyzer": "name_analyzer"},
+	  "first_name_compact": {"type": "string", "analyzer": "name_compact_analyzer"},
+	  "middle_name": {"type": "string", "analyzer": "name_analyzer"},
+	  "middle_name_compact": {"type": "string", "analyzer": "name_compact_analyzer"},
+	  "last_name": {"type": "string", "analyzer": "name_analyzer"},
+	  "last_name_compact": {"type": "string", "analyzer": "name_compact_analyzer"},
+	  "suffix": {"type": "string", "analyzer": "name_analyzer"},
+	  "dob_year": {"type": "integer"},
+	  "dob_month": {"type": "integer"},
+	  "dob_day": {"type": "integer"},
+	  "effective_date": {"type": "string", "index": "not_analyzed"},
+	  "registration_date": {"type": "string", "index": "not_analyzed"},
+	  "first_time_seen_voter_id": {"type": "string", "index": "not_analyzed"},
+	  "address": {"type": "string", "analyzer": "address_analyzer"},
+	  "city": {"type": "string", "analyzer": "simple"},
+	  "st": {"type": "string", "index": "not_analyzed"},
+	  "zip_code": {"type": "string", "index": "not_analyzed"},
+	  "lat_lng_location": {"type": "geo_point", "fielddata" : {"format" : "compressed", "precision" : "3m"}},
+	  "county": {"type": "string", "index": "not_analyzed"},
+	  "address_street_name": {"type": "string", "index": "not_analyzed"},
+	  "address_street_number": {"type": "string", "index": "not_analyzed"},
+	  "address_unit_designator": {"type": "string", "index": "not_analyzed"},
+	  "address_apt_number": {"type": "string", "index": "not_analyzed"},
+	  "ts_address": {"type": "string", "analyzer": "address_analyzer"},
+	  "ts_city": {"type": "string", "index": "not_analyzed"},
+	  "ts_st": {"type": "string", "index": "not_analyzed"},
+	  "ts_zip_code": {"type": "string", "index": "not_analyzed"},
+	  "ts_lat_lng_location": {"type": "geo_point", "fielddata" : {"format" : "compressed", "precision" : "3m"}},
+	  "ts_address_street_name": {"type": "string", "index": "not_analyzed"},
+	  "ts_address_street_number": {"type": "string", "index": "not_analyzed"},
+	  "ts_address_unit_designator": {"type": "string", "index": "not_analyzed"},
+	  "ts_address_apt_number": {"type": "string", "index": "not_analyzed"},
+	  "party": {"type": "string", "index": "not_analyzed"},
+	  "email": {"type": "string", "index": "not_analyzed"},
+	  "general_2016": {"type": "boolean"},
+	  "general_2014": {"type": "boolean"},
+	  "general_2012": {"type": "boolean"},
+	  "general_2010": {"type": "boolean"},
+	  "general_2008": {"type": "boolean"},
+	  "general_2006": {"type": "boolean"},
+	  "general_2004": {"type": "boolean"},
+	  "general_2002": {"type": "boolean"},
+	  "general_2000": {"type": "boolean"},
+	  "vf_g2016": {"type": "string", "index": "not_analyzed"},
+	  "vf_g2014": {"type": "string", "index": "not_analyzed"},
+	  "vf_g2012": {"type": "string", "index": "not_analyzed"},
+	  "vf_p2016": {"type": "string", "index": "not_analyzed"},
+	  "vf_p2014": {"type": "string", "index": "not_analyzed"},
+	  "vf_p2012": {"type": "string", "index": "not_analyzed"},
+	  "voterbase_voter_score": {"type": "string", "index": "not_analyzed"},
+	  "num_general_election_votes": {"type": "integer"},
+	  "num_primary_election_votes": {"type": "integer"},
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	  ***REMOVED***
+	}
+}
