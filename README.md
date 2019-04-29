@@ -17,58 +17,76 @@ Requirements
 Getting Started
 ---------------
 1. Build your index and doc type
-The way this was tooled before was not open-source-able. It should be re-tooled. In the meantime, you'll need to use whatever method you prefer to build an ElasticSearch index and doc type that matches the specifications in [elasticsearch.md](./elasticsearch.md). There are two json files in `data/` that will help some: [elasticsearch_index_mapping.json](./data/elasticsearch_index_mapping.json) and [elasticsearch_index_settings.json](./data/elasticsearch_index_settings.json). The worst part will be the synonym filters, which need to be substituted into `elasticsearch_index_settings.json` from `data/address_synonyms.txt` and `data/first_name_synonyms.txt`. You'll need the name of the index and the doc type in a later step. The index name and doc type the queries will use are configurable, but have a default of `voter_verifier` for the index and `voter_record` for the doc type.
+    The way this was tooled before was not open-source-able. It should be re-tooled. In the meantime, you'll need to use whatever method you prefer to build an ElasticSearch index and doc type that matches the specifications in [elasticsearch.md](./elasticsearch.md). There are two json files in `data/` that will help some: [elasticsearch_index_mapping.json](./data/elasticsearch_index_mapping.json) and [elasticsearch_index_settings.json](./data/elasticsearch_index_settings.json). The worst part will be the synonym filters, which need to be substituted into `elasticsearch_index_settings.json` from `data/address_synonyms.txt` and `data/first_name_synonyms.txt`. You'll need the name of the index and the doc type in a later step. The index name and doc type the queries will use are configurable, but have a default of `voter_verifier` for the index and `voter_record` for the doc type.
+
 1. Start your ElasticSearch cluster
+
 1. Index your data
-This is a BYOD situation, so you're kind of on your own here. End goal is to have voter record data loaded into the newly-created index.
+
+    This is a BYOD situation, so you're kind of on your own here. End goal is to have voter record data loaded into the newly-created index.
+
 1. Clone the repo
-```bash
-$ git clone git@github.com:civiccc/voter-verifier
-```
+
+    ```bash
+    $ git clone git@github.com:civiccc/voter-verifier
+    ```
+
 1. Install dependencies
-In most cases, `--with production` will be enough.
-```bash
-$ bundle install --with production
-```
+
+    In most cases, `--with production` will be enough.
+
+    ```bash
+    $ bundle install --with production
+    ```
+
 1. Set configuration environment variables
-If you used the default index name and doc type, only the ElasticSearch hostname needs to be set:
 
-Host names of the ElasticSearch cluster(s) to use as a comma-separated list. Default: `localhost:9200`.
-```bash
-$ export VOTER_VERIFIER_ES_HOSTS=localhost:9200,localhost:9201
-```
+    If you used the default index name and doc type, only the ElasticSearch hostname needs to be set:
 
-Other available options are:
+    Host names of the ElasticSearch cluster(s) to use as a comma-separated list. Default: `localhost:9200`.
 
-Port the server will listen on. Default: `9095`.
-```bash
-$ export VOTER_VERIFIER_PORT=9095
-```
+    ```bash
+    $ export VOTER_VERIFIER_ES_HOSTS=localhost:9200,localhost:9201
+    ```
 
-Timeout for ElasticSearch queries, in seconds. Default: `15`.
-```bash
-$ export VOTER_VERIFIER_ES_TIMEOUT=15
-```
+    *Other available options are:*
 
-Number of retries for ElasticSearch queries. Default: `1`.
-```bash
-$ export VOTER_VERIFIER_ES_RETRIES=15
-```
+    Port the server will listen on. Default: `9095`.
 
-Index name for ElasticSearch queries. Default: `voter_verifier`.
-```bash
-$ export VOTER_VERIFIER_ES_INDEX=voter_verifier
-```
+    ```bash
+    $ export VOTER_VERIFIER_PORT=9095
+    ```
 
-Doc type for ElasticSearch queries. Default: `voter_record`.
-```bash
-$ export VOTER_VERIFIER_ES_DOC_TYPE=15
-```
+    Timeout for ElasticSearch queries, in seconds. Default: `15`.
+
+    ```bash
+    $ export VOTER_VERIFIER_ES_TIMEOUT=15
+    ```
+
+    Number of retries for ElasticSearch queries. Default: `1`.
+
+    ```bash
+    $ export VOTER_VERIFIER_ES_RETRIES=15
+    ```
+
+    Index name for ElasticSearch queries. Default: `voter_verifier`.
+
+    ```bash
+    $ export VOTER_VERIFIER_ES_INDEX=voter_verifier
+    ```
+
+    Doc type for ElasticSearch queries. Default: `voter_record`.
+
+    ```bash
+    $ export VOTER_VERIFIER_ES_DOC_TYPE=15
+    ```
 
 1. Run the server
-```bash
-$ rake thrift_server:run
-```
+
+    ```bash
+    $ rake thrift_server:run
+    ```
+
 1. That's it! (for the server-side, hopefully?)
 
 ### Important: Deployment Guidance
@@ -77,6 +95,7 @@ Because this started life as an internal service on a private network, there is 
 Ruby Client
 ------------
 To get an `irb` session with the application context (and thus the Ruby client), run:
+
 ```bash
 $ bin/console
 ```
@@ -130,14 +149,16 @@ TODO
 1. Clone the repo
 1. Install dependencies (including development + test)
 1. run the server
-```bash
-$ VOTER_VERIFIER_ENV=development rake thrift_server:run
-```
 
-or to see other available tasks, run:
-```bash
-$ rake -T
-```
+    ```bash
+    $ VOTER_VERIFIER_ENV=development rake thrift_server:run
+    ```
+
+    or to see other available tasks, run:
+
+    ```bash
+    $ rake -T
+    ```
 
 Opening an application console
 ---------------------------------------
