@@ -160,7 +160,7 @@ TODO
 
     #### Linux
 
-    This time Linux users have more work: [Debian] (https://thrift.apache.org/docs/install/debian) | [CentOS] (https://thrift.apache.org/docs/install/centos)
+    This time Linux users have more work: [Debian](https://thrift.apache.org/docs/install/debian) | [CentOS](https://thrift.apache.org/docs/install/centos)
 
 1. Clone the repo
 
