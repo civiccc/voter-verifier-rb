@@ -164,11 +164,15 @@ TODO
 
 1. Clone the repo
 
+    ```bash
     $ git clone git@github.com:civiccc/voter-verifier-rb
+    ```
 
 1. Install dependencies (including development + test)
 
+    ```bash
     $ bundle install
+    ```
 
 1. run the server
 
