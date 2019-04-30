@@ -144,6 +144,8 @@ Civic Code Collective wouldn't be much of a collective without you! Got an idea 
 
 It's recommended, but not required, to do development for this repo within a Docker container using [dock](https://github.com/brigade/dock). This is definitely not required currently, as the dock integration is super broken. That could be your first contribution! Hopefully we remember to update this `README` as part of that.
 
+Be sure to also have a glance at the [Code of Conduct](./contributing.md).
+
 ### Using Docker and Dock
 TODO
 
