@@ -6,7 +6,7 @@ module ThriftServer
     class Metrics
       def initialize(statsd:)
         raise ArgumentError, 'Only dogstatsd is supported' unless statsd.is_a?(Datadog::Statsd)
-        ***REMOVED***
+        @global_tags = ["app_id:#{ENV['MARATHON_APP_ID']}", "task_id:#{ENV['MESOS_TASK_ID']}"]
         @statsd = statsd
       end
 

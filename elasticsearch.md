@@ -19,13 +19,12 @@ These are the fields defined on the index. The full ElasticSearch options for ea
 | dob_year | int_type |
 | dob_month | int_type |
 | dob_day | int_type |
-| registration_date | unanalyzed_string_type |
+| email | unanalyzed_string_type |
 | address | address_type |
 | city | analyzed_string_type |
 | st | unanalyzed_string_type |
 | zip_code | unanalyzed_string_type |
 | lat_lng_location | geo_point_type |
-| county | unanalyzed_string_type |
 | address_street_name | unanalyzed_string_type |
 | address_street_number | unanalyzed_string_type |
 | address_unit_designator | unanalyzed_string_type |
@@ -39,8 +38,8 @@ These are the fields defined on the index. The full ElasticSearch options for ea
 | ts_address_street_number | unanalyzed_string_type |
 | ts_address_unit_designator | unanalyzed_string_type |
 | ts_address_apt_number | unanalyzed_string_type |
-| party | unanalyzed_string_type |
-| email | unanalyzed_string_type |
+| registration_date | unanalyzed_string_type |
+| party | string_enum_type |
 | general_2016 | boolean_type |
 | general_2014 | boolean_type |
 | general_2012 | boolean_type |
@@ -56,53 +55,8 @@ These are the fields defined on the index. The full ElasticSearch options for ea
 | vf_p2016 | string_enum_type |
 | vf_p2014 | string_enum_type |
 | vf_p2012 | string_enum_type |
-| voter_score | string_enum_type |
 | num_general_election_votes | int_type |
 | num_primary_election_votes | int_type |
-| activist_score | float_type |
-| campaign_finance_score | float_type |
-| catholic_raw_score | float_type |
-| children_present_score | float_type |
-| climate_change_score | float_type |
-| college_funding_score | float_type |
-| college_graduate_score | float_type |
-| evangelical_raw_score | float_type |
-| govt_privacy_score | float_type |
-| gun_control_score | float_type |
-| gunowner_score | float_type |
-| high_school_only_score | float_type |
-| ideology_score | float_type |
-| income_rank_score | float_type |
-| local_voter_score | float_type |
-| marriage_score | float_type |
-| midterm_general_turnout_score | float_type |
-| minimum_wage_score | float_type |
-| moral_authority_score | float_type |
-| moral_care_score | float_type |
-| moral_equality_score | float_type |
-| moral_equity_score | float_type |
-| moral_loyalty_score | float_type |
-| moral_purity_score | float_type |
-| non_presidential_primary_turnout_score | float_type |
-| nonchristian_raw_score | float_type |
-| offyear_general_turnout_score | float_type |
-| otherchristian_raw_score | float_type |
-| paid_leave_score | float_type |
-| partisan_score | float_type |
-| path_to_citizen_score | float_type |
-| presidential_general_turnout_score | float_type |
-| presidential_primary_turnout_score | float_type |
-| prochoice_score | float_type |
-| tax_on_wealthy_score | float_type |
-| teaparty_score | float_type |
-| trump_resistance_score | float_type |
-| trump_support_score | float_type |
-| veteran_score | float_type |
-| race_white_score | float_type |
-| race_afam_score | float_type |
-| race_hisp_score | float_type |
-| race_natam_score | float_type |
-| race_asian_score | float_type |
 
 ### Field Specs
 The index uses the following field specs, which have been configured to strike a reasonable balance between accuracy and reach.
@@ -116,7 +70,6 @@ The index uses the following field specs, which have been configured to strike a
 | name_compact_type | `{"type": "string", "analyzer": "name_compact_analyzer"}`
 | string_enum_type | alias for unanalyzed_string_type |
 | int_type | `{"type": "integer"}` |
-| float_type | `{"type": "float", "index": "no"}` |
 | boolean_type | `{"type": "boolean"}` |
 | geo_point_type | `{"type": "geo_point", "fielddata" : {"format" : "compressed", "precision" : "3m"} }` |
 
