@@ -31,7 +31,7 @@ Getting Started
 1. Clone the repo
 
     ```bash
-    $ git clone git@github.com:civiccc/voter-verifier
+    $ git clone git@github.com:civiccc/voter-verifier-rb
     ```
 
 1. Install dependencies
