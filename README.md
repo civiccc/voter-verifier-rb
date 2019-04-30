@@ -10,7 +10,9 @@ Where's the voter data? Well, this project is BYOD. For more details about what 
 Requirements
 ------------
 1. ElasticSearch 1.7 (support for newer versions coming soon)
-1. Thrift 0.9+
+
+    It's pretty likely ElasticSearch 2.4 will also work, which is available on Homebrew, but it hasn't been tested. For ElasticSearch 1.7, download the binaries and install following the [installation instructions](https://www.elastic.co/guide/en/elasticsearch/reference/1.7/_installation.html). Repositories are available for both [APT and YUM](https://www.elastic.co/guide/en/elasticsearch/reference/1.7/setup-repositories.html).
+
 1. Ruby 2.3+
 1. bundler 1.16.3
 
@@ -34,10 +36,10 @@ Getting Started
 
 1. Install dependencies
 
-    In most cases, `--with production` will be enough.
+    In most cases, `--without development test` will be enough.
 
     ```bash
-    $ bundle install --with production
+    $ bundle install --without development test
     ```
 
 1. Set configuration environment variables
@@ -140,15 +142,34 @@ Contributing
 -------------
 Civic Code Collective wouldn't be much of a collective without you! Got an idea to make Voter Verifier better, stronger or faster? Clone it, branch it and hack it. When it's done, open up a PR. Want to help but don't know where to start? Head on over to the [issues page](https://github.com/civiccc/voter-verifier/issues) and see if something calls your name. Documentation and test cases are always great contributions.
 
-It's recommended, but not required, to do development for this repo within a Docker container using [dock](***REMOVED***dock). This is definitely not required currently, as the dock integration is super broken. That could be your first contribution! Hopefully we remember to update this `README` as part of that.
+It's recommended, but not required, to do development for this repo within a Docker container using [dock](https://github.com/brigade/dock). This is definitely not required currently, as the dock integration is super broken. That could be your first contribution! Hopefully we remember to update this `README` as part of that.
 
 ### Using Docker and Dock
 TODO
 
 ### The Old-Fashioned Way
-1. Install and configure ElasticSearch (see [Getting Started](#getting-started) above).
+1. Install and configure ElasticSearch
+
+    (see [Getting Started](#getting-started) above).
+
+1. Install Thrift 0.9+
+
+    #### Homebrew (MacOS)
+
+    $ brew install thrift
+
+    #### Linux
+
+    This time Linux users have more work: [Debian] (https://thrift.apache.org/docs/install/debian) | [CentOS] (https://thrift.apache.org/docs/install/centos)
+
 1. Clone the repo
+
+    $ git clone git@github.com:civiccc/voter-verifier-rb
+
 1. Install dependencies (including development + test)
+
+    $ bundle install
+
 1. run the server
 
     ```bash

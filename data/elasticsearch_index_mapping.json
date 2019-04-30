@@ -35,8 +35,14 @@
 	  "ts_address_street_number": {"type": "string", "index": "not_analyzed"},
 	  "ts_address_unit_designator": {"type": "string", "index": "not_analyzed"},
 	  "ts_address_apt_number": {"type": "string", "index": "not_analyzed"},
+		"phone": {"type": "string", "index": "not_analyzed"},
+		"vb_phone": {"type": "string", "index": "not_analyzed"},
+		"vb_phone_type": {"type": "string", "index": "not_analyzed"},
+		"vb_phone_wireless": {"type": "string", "index": "not_analyzed"},
+		"ts_wireless_phone": {"type": "string", "index": "not_analyzed"},
+		"email": {"type": "string", "index": "not_analyzed"},
+		"email_append_level": {"type": "string", "index": "not_analyzed"},
 	  "party": {"type": "string", "index": "not_analyzed"},
-	  "email": {"type": "string", "index": "not_analyzed"},
 	  "general_2016": {"type": "boolean"},
 	  "general_2014": {"type": "boolean"},
 	  "general_2012": {"type": "boolean"},
@@ -52,53 +58,7 @@
 	  "vf_p2016": {"type": "string", "index": "not_analyzed"},
 	  "vf_p2014": {"type": "string", "index": "not_analyzed"},
 	  "vf_p2012": {"type": "string", "index": "not_analyzed"},
-	  "voterbase_voter_score": {"type": "string", "index": "not_analyzed"},
-	  "num_general_election_votes": {"type": "integer"},
-	  "num_primary_election_votes": {"type": "integer"},
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
-	  ***REMOVED***
+		"num_general_election_votes": {"type": "integer"},
+		"num_primary_election_votes": {"type": "integer"}
 	}
 }
