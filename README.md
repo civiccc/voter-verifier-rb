@@ -1,7 +1,7 @@
 Voter Verifier
 ====================
 
-TODO: brief qualitative/historical intro
+Voter Verifier is an ElasticSearch-based system for matching people to their voter registration records.
 
 Voter Record Data
 ------------------
