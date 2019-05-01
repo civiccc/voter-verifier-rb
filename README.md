@@ -24,6 +24,10 @@ Getting Started
 
 1. Start your ElasticSearch cluster
 
+    ```bash
+    $ elasticsearch
+    ```
+
 1. Index your data
 
     This is a BYOD situation, so you're kind of on your own here. End goal is to have voter record data loaded into the newly-created index.
